@@ -1,0 +1,52 @@
+Toronto
+Montreal
+Vancouver
+Calgary
+Edmonton
+Ottawa
+Quebec City
+Winnipeg
+Hamilton
+Kitchener
+London
+Victoria
+Halifax
+Oshawa
+Windsor
+Saskatoon
+St. Catharines
+Barrie
+Regina
+Sherbrooke
+St. John's
+Kelowna
+Abbotsford
+Kingston
+Saguenay
+Trois-Rivières
+Guelph
+Moncton
+Brantford
+Saint John
+Thunder Bay
+Peterborough
+Lethbridge
+Nanaimo
+Kamloops
+Belleville
+Chatham-Kent
+Fredericton
+Chilliwack
+Red Deer
+Sarnia
+Drummondville
+Saint John's
+Saint-Jérôme
+Prince George
+Medicine Hat
+Newmarket
+Charlottetown
+Saint-Hyacinthe
+Vernon
+Wood Buffalo
+Victoriaville
