@@ -10,7 +10,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.List;
 
 
-public class CrowlerCheapFlight {
+public class CrawlerCheapFlight {
 
     public static void main(String[] args) {
         String checkInDate,checkOutDate,destination,numberOfPerson,numberOfRooms;

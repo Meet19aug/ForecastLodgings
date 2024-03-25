@@ -1,0 +1,73 @@
+package org.example;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class FetchDataFromExcel {
+
+    public static List<Map<String, String>> readData(List<String> filePaths) {
+        List<Map<String, String>> cityList = new ArrayList<>();
+
+        for (String filePath : filePaths) {
+            try (FileInputStream fileInputStream = new FileInputStream(filePath);
+                 Workbook workbook = new XSSFWorkbook(fileInputStream)) {
+
+                Sheet sheet = workbook.getSheet("Sheet2");
+
+                // Skip the first row (header row)
+                boolean firstRowSkipped = false;
+
+                for (Row row : sheet) {
+                    if (!firstRowSkipped) {
+                        firstRowSkipped = true;
+                        continue;
+                    }
+
+                    Cell cell = row.getCell(0); // Assuming category is stored in the first column
+                    if (cell != null && cell.getCellType() == CellType.STRING) {
+
+                        String cityName = row.getCell(0).getStringCellValue();
+                        Double cityId = row.getCell(1).getNumericCellValue();
+
+                        Map<String, String> cityDetails = new HashMap<>();
+                        cityDetails.put("City", cityName);
+                        cityDetails.put("City_id", String.valueOf(cityId));
+                        cityList.add(cityDetails);
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("IOException Occurred: " + e.getMessage());
+            }
+        }
+        return cityList;
+    }
+
+    public static void main(String[] args) {
+
+        List<String> filePaths = new ArrayList<>();
+
+        Path currentPath = Paths.get(System.getProperty("user.dir"));
+        Path dirpath = Paths.get(currentPath.toString(), "assets");
+        String filename = dirpath.toString() + "/Book1.xlsx" ;
+
+
+        filePaths.add(filename);
+
+        List<Map<String, String>> cityList = readData(filePaths);
+
+        for (Map<String, String> city : cityList) {
+            System.out.println("City Name: " + city.get("City"));
+            System.out.println("City Id: " + city.get("City_id"));
+            System.out.println();
+        }
+    }
+}
