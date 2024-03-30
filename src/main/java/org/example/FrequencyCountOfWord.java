@@ -53,7 +53,6 @@ public class FrequencyCountOfWord {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return wordFrequencyMap;
     }
     public static int getFrequencyOfWord(Map<String, Integer> wordFrequencyMap, String word) {

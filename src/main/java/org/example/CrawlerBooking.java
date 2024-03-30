@@ -252,6 +252,7 @@ public class CrawlerBooking {
 				System.out.println("Ratings in words is : "+ ratingInWords);
 				String numberOfReview = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[2]")).getText();
 				System.out.println("Number of Review is : "+ numberOfReview);
+				priceOfHotel=HotelInfoClass.convertToNumeric(priceOfHotel);
 
 				HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
 				obj.saveObjectToCSV("booking.csv");

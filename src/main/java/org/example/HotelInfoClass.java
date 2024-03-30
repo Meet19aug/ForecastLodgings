@@ -90,6 +90,11 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
             System.err.println("Error writing to the file: " + e.getMessage());
         }
     }
+    public static String convertToNumeric(String input) {
+        // Remove all non-numeric characters
+        String numericString = input.replaceAll("[^\\d]", "");
+        return numericString;
+    }
     public static HotelInfoClass[] loadKObjectFromCSV(String filename, int maxExtract) {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(), "assets");
