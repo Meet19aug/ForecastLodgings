@@ -74,13 +74,17 @@ public class CrawlerCheapFlight {
 
                 String priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[1]")).getText();
                 System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+                if(priceOfHotel.equals("Before signing in")){
+                    priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[2]")).getText();
+                    System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+                }
                 String ratingOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[1]")).getText();
                 System.out.println("Rating Of Hotel is : " + ratingOfHotel);
                 String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]/div[1]")).getText();
                 System.out.println("Ratings in words is : "+ ratingInWords);
                 priceOfHotel= HotelInfoClass.convertToNumeric(priceOfHotel);
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
-                obj.saveObjectToCSV("cheapflight.csv");
+                obj.saveObjectToCSV("cheapflights_"+destination+".csv");
 
 
             } catch (Exception e) {
@@ -91,7 +95,7 @@ public class CrawlerCheapFlight {
                 System.out.println("Crawling for one element done...");
             }
         }
-        driver.close();
+        //driver.close();
 
     }
 

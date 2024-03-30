@@ -79,8 +79,9 @@ public class CrawlerKayak {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ///html/body/div[2]/div[2]/div/div/main/div/div/div/div/div[1]/div/section/div[3]/div/div[6]/div/div/div[3]/div[3]/div/div/div/div[1]/div[1]
+            ///html/body/div[2]/div[2]/div/div/main/div/div/div/div/div[1]/div/section/div[3]/div/div[7]/div/div/div[3]/div[3]/div/div/div[2]/div[1]
             ///html/body/div[2]/div[2]/div/div/main/div/div/div/div/div[1]/div/section/div[3]/div/div[1]/div/div
+            ///html/body/div[2]/div[2]/div/div/main/div/div/div/div/div[2]/div/section/div[2]/div/div[7]/div/div/div[3]/div[2]/div[1]/div[2]/div[1]/div/div[1]
             try {
                 // Extract data from the listing as strings
 
@@ -90,11 +91,17 @@ public class CrawlerKayak {
                 String titleOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getText();
                 System.out.println("titleOfHotel: " + titleOfHotel);
 
-                String priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div/div[1]/div[1]")).getText();
+                String priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[1]")).getText();
                 System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
-                String ratingOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[1]")).getText();
+                //div[3]/div[3]/div/div/div/div[1]/div[2]
+                if(priceOfHotel.equals("Before signing in")){
+                    priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[2]")).getText();
+                    System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+                }
+                String ratingOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[1]")).getText();
                 System.out.println("Rating Of Hotel is : " + ratingOfHotel);
-                String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[2]")).getText();
+                //.//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[1]
+                String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]")).getText();
                 //.//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[2]
                 priceOfHotel = HotelInfoClass.convertToNumeric(priceOfHotel);
                 System.out.println("New Price is : "+ priceOfHotel);
@@ -102,7 +109,7 @@ public class CrawlerKayak {
                 System.out.println("Ratings in words is : "+ ratingInWords);
 
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
-                obj.saveObjectToCSV("kayak.csv");
+                obj.saveObjectToCSV("kayak_"+destination+".csv");
 
             } catch (Exception e) {
                 // Handle any other elements not found exception for this listing

@@ -60,7 +60,7 @@ public class CrawlerBooking {
 			selectNumberOfRoomsAndSubmit(driver, numberOfRooms);
 			Thread.sleep(2500);
 
-			crawlListingsAndStoreDataForBooking(driver);
+			crawlListingsAndStoreDataForBooking(driver,destination);
 
 			System.out.println("\n**********************************************************************************************\n");
 
@@ -207,7 +207,7 @@ public class CrawlerBooking {
 
 	}
 
-	private static void crawlListingsAndStoreDataForBooking(WebDriver driver) {
+	private static void crawlListingsAndStoreDataForBooking(WebDriver driver,String destination) {
 		System.out.println("crawlListingsAndStoreDataForBooking");
 
 		try {
@@ -255,7 +255,7 @@ public class CrawlerBooking {
 				priceOfHotel=HotelInfoClass.convertToNumeric(priceOfHotel);
 
 				HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
-				obj.saveObjectToCSV("booking.csv");
+				obj.saveObjectToCSV("booking_"+destination+".csv");
 
 			} catch (Exception e) {
 				System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
