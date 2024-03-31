@@ -84,7 +84,7 @@ public class CrawlerCheapFlight {
                 ratingOfHotel = ratingOfHotel.trim();
                 String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]/div[1]")).getText();
                 System.out.println("Ratings in words is : "+ ratingInWords);
-                ratingInWords = ratingInWords.trim();
+                ratingInWords = ratingInWords.replaceAll("\n"," ").trim();
                 priceOfHotel= HotelInfoClass.convertToNumeric(priceOfHotel);
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
                 obj.saveObjectToCSV("cheapflights.csv");

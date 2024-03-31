@@ -35,7 +35,7 @@ class InvertedIndex {
     }
 
     private String[] extractTerms(HotelDataEntry document) {
-        // Extract hotelName, city, price, rating, review, and url from the document
+        // Extract hotelName, price, rating, review, and url from the document
         String hotelName = document.hotelName.toLowerCase();
         String price = String.valueOf(document.price); // Convert price to string
         String rating = String.valueOf(document.rating); // Convert rating to string
@@ -117,48 +117,36 @@ public class PriceRangeFiletering {
     }
 
     // Method to load hotel data from CSV file and populate the inverted index
+    // Method to load hotel data from CSV file and populate the inverted index
     private static void loadKObjectFromCSV(InvertedIndex index, String csvFileName) {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
-        Path dirpath = Paths.get(currentPath.toString(),"assets");
+        Path dirpath = Paths.get(currentPath.toString(), "assets");
 
-        csvFileName = dirpath.toString() +"/"+csvFileName;
+        csvFileName = dirpath.toString() + "/" + csvFileName;
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFileName))) {
             String line;
             int id = 1; // Starting ID for hotels
-            int j=0;
+            int j = 0;
             while ((line = br.readLine()) != null) {
+                System.out.println(line);
                 String[] data = line.split("\",\"");
                 System.out.println("index " + j++);
-                System.out.println(data[2]);
-                if (data.length > 5) { // Ensure data has at least six parts
+                System.out.println(data[0] + "\t" + data[1] + "\t" + data[2] + "\t" + data[3] + "\t" + data[4] + "\t");
+                if (data.length > 4) { // Ensure data has at least five parts
                     String hotelName = data[0].trim();
                     String url = data[1].trim();
-                    double price = parseRating(data[2].trim());
-                    double rating = parsePrice(data[3]);
-                    System.out.println(price+"--\t\t--"+data[4]);
-                    String review = parseReview(data[4]);
-                    if (price != -1) { // Check if price is valid
-                        index.addDocument(id++, new HotelDataEntry(hotelName, price, rating, review, url));
-                    } else {
-                        System.out.println("Invalid price format: " + data[3]);
-                    }
-                }else{
-                    System.out.println("else part");
+                    double price = Double.parseDouble(data[2].trim());
+                    double rating = Double.parseDouble(data[3].trim());
+                    String review = parseReview(data[4].trim());
+                    index.addDocument(id++, new HotelDataEntry(hotelName, price, rating, review, url));
+                } else {
+                    System.out.println("Invalid data format: " + Arrays.toString(data));
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    // Method to extract the city name from the provided format
-    private static String extractCity(String data) {
-        // Extract city name from the provided format
-        int index = data.indexOf('-');
-        if (index != -1) {
-            return data.substring(0, index).trim();
-        }
-        return data.trim(); // Return the original string if "-" is not found
     }
 
     private static double parsePrice(String priceStr) {

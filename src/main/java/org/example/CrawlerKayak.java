@@ -105,7 +105,7 @@ public class CrawlerKayak {
                 //.//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[1]
                 String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]")).getText();
                 //.//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[2]
-                ratingInWords = ratingInWords.trim();
+                ratingInWords = ratingInWords.replaceAll("\n"," ").trim();
                 priceOfHotel = HotelInfoClass.convertToNumeric(priceOfHotel);
                 System.out.println("New Price is : "+ priceOfHotel);
 
