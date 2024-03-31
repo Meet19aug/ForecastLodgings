@@ -10,18 +10,16 @@ import java.util.*;
 // Define HotelDataEntry class to represent hotel data
 class HotelDataEntry {
     String hotelName;
-    String city;
     double price;
     double rating;
-    String review;
+    String ratingInWords;
     String url;
 
-    public HotelDataEntry(String hotelName, String city, double price, double rating, String review, String url) {
+    public HotelDataEntry(String hotelName, double price, double rating, String ratingInWords, String url) {
         this.hotelName = hotelName;
-        this.city = city;
         this.price = price;
         this.rating = rating;
-        this.review = review;
+        this.ratingInWords = ratingInWords;
         this.url = url;
     }
 }
@@ -39,11 +37,10 @@ class InvertedIndex {
     private String[] extractTerms(HotelDataEntry document) {
         // Extract hotelName, city, price, rating, review, and url from the document
         String hotelName = document.hotelName.toLowerCase();
-        String city = document.city.toLowerCase();
         String price = String.valueOf(document.price); // Convert price to string
         String rating = String.valueOf(document.rating); // Convert rating to string
-        String review = document.review.toLowerCase(); // Convert review to lowercase string
-        return new String[]{hotelName, city, price, rating, review};
+        String review = document.ratingInWords.toLowerCase(); // Convert review to lowercase string
+        return new String[]{hotelName, price, rating, review};
     }
 
     // Method to add a hotel to the index
@@ -83,7 +80,7 @@ public class PriceRangeFiletering {
         InvertedIndex index = new InvertedIndex();
 
         // Populate the inverted index with hotel data from CSV file
-        loadKObjectFromCSV(index, "kayak.csv");
+        loadKObjectFromCSV(index, "booking.csv");
 
         // Menu-driven user interaction loop
         while (true) {
@@ -129,21 +126,25 @@ public class PriceRangeFiletering {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFileName))) {
             String line;
             int id = 1; // Starting ID for hotels
+            int j=0;
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data.length >= 6) { // Ensure data has at least six parts
-                    String hotelName = data[0].replace("\"", "").trim();
-                    String url = data[1].replace("\"", "").trim();
-                    String city = extractCity(data[2]); // Extract city from the provided format
+                String[] data = line.split("\",\"");
+                System.out.println("index " + j++);
+                System.out.println(data[2]);
+                if (data.length > 5) { // Ensure data has at least six parts
+                    String hotelName = data[0].trim();
+                    String url = data[1].trim();
+                    double price = parseRating(data[2].trim());
                     double rating = parsePrice(data[3]);
-                    double price = parseRating(data[4].trim());
-                    System.out.println(price+"--\t\t--"+data[5]);
-                    String review = parseReview(data[5]);
+                    System.out.println(price+"--\t\t--"+data[4]);
+                    String review = parseReview(data[4]);
                     if (price != -1) { // Check if price is valid
-                        index.addDocument(id++, new HotelDataEntry(hotelName, city, price, rating, review, url));
+                        index.addDocument(id++, new HotelDataEntry(hotelName, price, rating, review, url));
                     } else {
                         System.out.println("Invalid price format: " + data[3]);
                     }
+                }else{
+                    System.out.println("else part");
                 }
             }
         } catch (IOException e) {
@@ -201,8 +202,7 @@ public class PriceRangeFiletering {
         for (int hotelId : filteredHotels) {
             HotelDataEntry hotel = index.getHotelById(hotelId);
             if (hotel != null) {
-                System.out.println("Name: " + hotel.hotelName + ", \nCity: " + hotel.city
-                        + ", \nPrice: " + hotel.price + ", \nRating: " + hotel.rating + ", \nReview: " + hotel.review + ", \nURL: " + hotel.url);
+                System.out.println("Name: " + hotel.hotelName + ", \nPrice: " + hotel.price + ", \nRating: " + hotel.rating + ", \nReview: " + hotel.ratingInWords + ", \nURL: " + hotel.url);
                 System.out.println("********************************************");
             }
         }

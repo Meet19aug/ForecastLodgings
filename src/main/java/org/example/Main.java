@@ -176,7 +176,7 @@ public class Main {
                 HotelInfoClass[] hi = loadKObjectFromCSV(bestUrl, kload);
 
                 try {
-                    //JavaMailUtil.txt.sendMail(emailOfUser,hi,kload);
+                    JavaMailUtil.sendMail(emailOfUser,hi,kload);
                 } catch (Exception e) {
                     System.out.println("An error occurred while sending the email: " + e.getMessage());
                 }finally {

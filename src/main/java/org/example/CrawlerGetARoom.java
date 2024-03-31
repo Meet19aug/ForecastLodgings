@@ -42,7 +42,7 @@ public class CrawlerGetARoom {
         String checkOutMonth=checkOutPart[1];
         String checkOutYear=checkOutPart[0];
         String url = "https://www.getaroom.com/searches/show?amenities%5B%5D=&check_in="+checkInMonth+"%2F"+checkInD+"%2F"+checkInYear+"&check_out="+checkOutMonth+"%2F"+checkOutD+"%2F"+checkOutYear+"&destination="+destination+"&lucky=true&page=1&property_name=&rinfo=%5B%5B18%2C18%5D%5D&sort_order=position";
-        String outputFile = "getARoom_"+destination+".html"; // Name of the output HTML file
+        String outputFile = "getARoom.html"; // Name of the output HTML file
 
 
         System.out.println("Fetching Date for Booking.com.... Wait it takes some time");

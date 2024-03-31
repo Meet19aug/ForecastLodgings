@@ -41,8 +41,8 @@ public class FindPatternInFile {
     // Main method to test the functions
     public static void main(String[] args) {
 
-        String fileName = "cheapflight.csv"; // Specify the path to your input file
-        String regex = "very good";
+        String fileName = "cheapflights_Windsor.csv"; // Specify the path to your input file
+        String regex = "poor";
         readFile(fileName,regex);
     }
 }

@@ -3,6 +3,8 @@ package org.example;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HotelInfoClass implements Comparable<HotelInfoClass> {
     String hotelName;
@@ -10,7 +12,6 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
     String ratingNumber;
     String ratingWord;
     String priceOfHotel;
-
     HotelInfoClass(){
     }
 
@@ -95,6 +96,19 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
         String numericString = input.replaceAll("[^\\d]", "");
         return numericString;
     }
+    public static String extractScore(String input) {
+        // Define a regular expression pattern to match a decimal number
+        Pattern pattern = Pattern.compile("\\b\\d+\\.\\d+\\b");
+        Matcher matcher = pattern.matcher(input);
+
+        // Find the first match
+        if (matcher.find()) {
+            return matcher.group();
+        } else {
+            return null; // Return null if no match found
+        }
+    }
+
     public static HotelInfoClass[] loadKObjectFromCSV(String filename, int maxExtract) {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(), "assets");

@@ -68,25 +68,26 @@ public class CrawlerCheapFlight {
 
                 String linkToHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getAttribute("href");
                 System.out.println("Link to Rooms: " + linkToHotel);
-
+                linkToHotel = linkToHotel.trim();
                 String titleOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getText();
                 System.out.println("titleOfHotel: " + titleOfHotel);
-
+                titleOfHotel = titleOfHotel.trim();
                 String priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[1]")).getText();
                 System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 if(priceOfHotel.equals("Before signing in")){
                     priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[2]")).getText();
                     System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 }
+                priceOfHotel = priceOfHotel.trim();
                 String ratingOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[1]")).getText();
                 System.out.println("Rating Of Hotel is : " + ratingOfHotel);
+                ratingOfHotel = ratingOfHotel.trim();
                 String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]/div[1]")).getText();
                 System.out.println("Ratings in words is : "+ ratingInWords);
+                ratingInWords = ratingInWords.trim();
                 priceOfHotel= HotelInfoClass.convertToNumeric(priceOfHotel);
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
-                obj.saveObjectToCSV("cheapflights_"+destination+".csv");
-
-
+                obj.saveObjectToCSV("cheapflights.csv");
             } catch (Exception e) {
                 System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
 

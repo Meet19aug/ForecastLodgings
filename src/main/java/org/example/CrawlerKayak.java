@@ -87,10 +87,10 @@ public class CrawlerKayak {
 
                 String linkToHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getAttribute("href");
                 System.out.println("Link to Rooms: " + linkToHotel);
-
+                linkToHotel = linkToHotel.trim();
                 String titleOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getText();
                 System.out.println("titleOfHotel: " + titleOfHotel);
-
+                titleOfHotel = titleOfHotel.trim();
                 String priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[1]")).getText();
                 System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 //div[3]/div[3]/div/div/div/div[1]/div[2]
@@ -98,18 +98,21 @@ public class CrawlerKayak {
                     priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[2]")).getText();
                     System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 }
+                priceOfHotel = priceOfHotel.trim();
                 String ratingOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[1]")).getText();
                 System.out.println("Rating Of Hotel is : " + ratingOfHotel);
+                ratingOfHotel = ratingOfHotel.trim();
                 //.//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[1]
                 String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]")).getText();
                 //.//div[3]/div[2]/div[1]/div/div[4]/div/div[1]/div[2]
+                ratingInWords = ratingInWords.trim();
                 priceOfHotel = HotelInfoClass.convertToNumeric(priceOfHotel);
                 System.out.println("New Price is : "+ priceOfHotel);
 
                 System.out.println("Ratings in words is : "+ ratingInWords);
 
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
-                obj.saveObjectToCSV("kayak_"+destination+".csv");
+                obj.saveObjectToCSV("kayak.csv");
 
             } catch (Exception e) {
                 // Handle any other elements not found exception for this listing

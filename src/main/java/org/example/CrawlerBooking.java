@@ -242,20 +242,29 @@ public class CrawlerBooking {
 				// Extract data from the listing as strings
 				String linkToHotel = listing.findElement(By.xpath(".//div[1]/div/div[1]/div/h3/a")).getAttribute("href");
 				System.out.println("Link to Rooms: " + linkToHotel);
+				linkToHotel = linkToHotel.trim();
 				String titleOfHotel = listing.findElement(By.xpath(".//div[1]/div/div[1]/div/h3/a/div[1]")).getText();
+				titleOfHotel = titleOfHotel.trim();
 				System.out.println("titleOfHotel: " + titleOfHotel);
 				String priceOfHotel = listing.findElement(By.xpath(".//div[1]/div[2]/div/div[2]/div[2]/div/div[1]/span")).getText();
 				System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+				priceOfHotel = priceOfHotel.trim();
 				String ratingOfHotel = listing.findElement(By.xpath(".//div[1]/div[2]/div/div[1]/div[2]/div/div/a/span/div/div[1]")).getText();
 				System.out.println("Rating Of Hotel is : " + ratingOfHotel);
+				ratingOfHotel = ratingOfHotel.trim();
 				String ratingInWords = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[1]")).getText();
 				System.out.println("Ratings in words is : "+ ratingInWords);
+				ratingInWords = ratingInWords.trim();
 				String numberOfReview = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[2]")).getText();
 				System.out.println("Number of Review is : "+ numberOfReview);
+				numberOfReview = numberOfReview.trim();
+
+				ratingOfHotel = HotelInfoClass.extractScore(ratingOfHotel);
+
 				priceOfHotel=HotelInfoClass.convertToNumeric(priceOfHotel);
 
 				HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
-				obj.saveObjectToCSV("booking_"+destination+".csv");
+				obj.saveObjectToCSV("booking.csv");
 
 			} catch (Exception e) {
 				System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
