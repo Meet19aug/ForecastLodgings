@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EditDistance {
+public class EditDistanceSpellCheck {
     public static int editDistance(String word1, String word2) {
         int len1 = word1.length();
         int len2 = word2.length();
@@ -96,7 +96,6 @@ public class EditDistance {
 
     public static Map<String, Integer> sortByValue(Map<String, Integer> unsortedMap_mp) {
         List<Map.Entry<String, Integer>> list_mp = new LinkedList<>(unsortedMap_mp.entrySet());
-
         Collections.sort(list_mp, new Comparator<Map.Entry<String, Integer>>() {
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
                 return o1.getValue().compareTo(o2.getValue());

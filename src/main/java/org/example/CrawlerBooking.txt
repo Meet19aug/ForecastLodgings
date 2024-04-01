@@ -13,8 +13,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-import static org.example.DateFunctions.getMonthName;
-import static org.example.DateFunctions.getMonthValue;
+import static org.example.DateRelatedFunctions.getMonthName;
+import static org.example.DateRelatedFunctions.getMonthValue;
 
 
 public class CrawlerBooking {

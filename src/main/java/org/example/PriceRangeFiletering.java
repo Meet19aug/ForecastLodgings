@@ -77,10 +77,15 @@ public class PriceRangeFiletering {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        String filename = "booking.csv";
+        runProgram(filename);
+    }
+
+    public static void runProgram(String filename) {
         InvertedIndex index = new InvertedIndex();
 
         // Populate the inverted index with hotel data from CSV file
-        loadKObjectFromCSV(index, "booking.csv");
+        loadKObjectFromCSVII(index, filename);
 
         // Menu-driven user interaction loop
         while (true) {
@@ -118,7 +123,7 @@ public class PriceRangeFiletering {
 
     // Method to load hotel data from CSV file and populate the inverted index
     // Method to load hotel data from CSV file and populate the inverted index
-    private static void loadKObjectFromCSV(InvertedIndex index, String csvFileName) {
+    private static void loadKObjectFromCSVII(InvertedIndex index, String csvFileName) {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(), "assets");
 

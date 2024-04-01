@@ -121,7 +121,7 @@ public class CrawlerKayak {
                 System.out.println("Crawling for one element done...");
             }
         }
-        //driver.close();
+        driver.quit();
 
     }
 }

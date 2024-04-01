@@ -113,7 +113,7 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(), "assets");
         filename = dirpath.toString() + "/" + filename;
-        System.out.println("LoadKObjectFromCSV" + filename);
+        System.out.println("LoadKObjectFromCSV : " + filename);
         HotelInfoClass[] hotelsdata = new HotelInfoClass[maxExtract];
         for (int i = 0; i < maxExtract; i++) {
             hotelsdata[i]=new HotelInfoClass();
@@ -142,6 +142,7 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
                             hotelsdata[cnt].setRatingWord(data[4].replace("\"", ""));
                             cnt++;
                         }
+                        System.out.println("---------");
                     }else{
                         return hotelsdata;
                     }
@@ -154,7 +155,6 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
         }
         return null; // Return null if something goes wrong
     }
-
 
     @Override
     public int compareTo(HotelInfoClass o) {

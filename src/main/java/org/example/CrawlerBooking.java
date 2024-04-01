@@ -12,9 +12,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-import static org.example.DateFunctions.getMonthName;
-import static org.example.DateFunctions.getMonthValue;
+import static org.example.DateRelatedFunctions.getMonthName;
+import static org.example.DateRelatedFunctions.getMonthValue;
 
 
 public class CrawlerBooking {
@@ -77,8 +78,14 @@ public class CrawlerBooking {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//String xpathToDateBox = "//div[@data-testid=\"searchbox-dates-container\"]";
-		//driver.findElement(By.id(xpathToDateBox)).click();
+
+		try{
+			String xpathToCheckButton = "//button[@aria-label=\"Previous month\"]";
+			driver.findElement(By.id("xpathToCheckButton"));
+		}catch (NoSuchElementException e){
+			String xpathToDateBox = "//div[@data-testid=\"searchbox-dates-container\"]";
+			driver.findElement(By.id(xpathToDateBox)).click();
+		}
 
 		String[] inDate = checkInDate.split("-");
 
@@ -229,8 +236,6 @@ public class CrawlerBooking {
 		}
 
 		for (int i = 0; i < listings.size(); i++) {
-
-
 			WebElement listing = listings.get(i);
 			try {
 				Thread.sleep(1000);
@@ -253,23 +258,22 @@ public class CrawlerBooking {
 				System.out.println("Rating Of Hotel is : " + ratingOfHotel);
 				ratingOfHotel = ratingOfHotel.trim();
 				String ratingInWords = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[1]")).getText();
-				System.out.println("Ratings in words is : "+ ratingInWords);
+				System.out.println("Ratings in words is : " + ratingInWords);
 				ratingInWords = ratingInWords.trim();
 				String numberOfReview = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[2]")).getText();
-				System.out.println("Number of Review is : "+ numberOfReview);
+				System.out.println("Number of Review is : " + numberOfReview);
 				numberOfReview = numberOfReview.trim();
 
 				ratingOfHotel = HotelInfoClass.extractScore(ratingOfHotel);
 
-				priceOfHotel=HotelInfoClass.convertToNumeric(priceOfHotel);
+				priceOfHotel = HotelInfoClass.convertToNumeric(priceOfHotel);
 
-				HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
+				HotelInfoClass obj = new HotelInfoClass(titleOfHotel, linkToHotel, priceOfHotel, ratingOfHotel, ratingInWords);
 				obj.saveObjectToCSV("booking.csv");
 
 			} catch (Exception e) {
 				System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
-			}
-			finally {
+			} finally {
 				System.out.println("Competed the crawling for Booking.com");
 			}
 		}

@@ -1,24 +1,15 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
-import static org.example.CrawlerBooking.fetchDataFromBooking;
-import static org.example.CrawlerCheapFlight.fetchDataFromCheapFlight;
-import static org.example.EditDistance.exe2a;
+import static org.example.EditDistanceSpellCheck.exe2a;
 import static org.example.FrequencyCountOfWord.*;
 import static org.example.HotelInfoClass.loadKObjectFromCSV;
-import static org.example.CrawlerKayak.fetchDataFromKayak;
 import static org.example.PageRanking.mostSuitablePageURL;
 
 public class Main {
@@ -34,7 +25,8 @@ public class Main {
     private static void menu(List<String> filePaths,Path dirpath) {
         int kth=2;
         System.out.println("Welcome to Hotel Reservation System!");
-
+        String searchTitle="";
+        Scanner scanner = new Scanner(System.in);
         List<Map<String, String>> products = FetchDataFromExcel.readData(filePaths);
         DSTrie trie = new DSTrie();
         for (Map<String, String> product : products) {
@@ -49,17 +41,17 @@ public class Main {
             }
         }
 
-        Scanner scanner = new Scanner(System.in);
+
 
         boolean menu = true;
-        String searchTitle = "";
         System.out.println("Most Search Cities are: ");
-        printMostSearchCities(dirpath,kth);
+        TrendingSearchFunctionality.printMostSearchCities(dirpath,kth);
         while (menu) {
             System.out.println("Enter \"exit\" to exit.");
             do {
                 System.out.print("Enter the city to search for: ");
                 searchTitle = scanner.nextLine();
+                searchTitle = searchTitle.toLowerCase();
             } while (!searchTitle.matches("[a-z]+"));
             if ("exit".equalsIgnoreCase(searchTitle)) {
                 System.out.println("Exiting..");
@@ -71,6 +63,7 @@ public class Main {
                 // returns 1 if no suggesion word found. so check for most 2 similar word
                 // return 0 if it found the word, and 3 if found the correct word.
                 if (x == 3) {
+                    TrendingSearchFunctionality.updateFrequency("city_search_frequencies.csv",searchTitle);
                     System.out.println("---------------- > May your " + searchTitle + " trip remain memorable.  <----------------");
                     menu = false;
                 }
@@ -150,9 +143,9 @@ public class Main {
 
 
         System.out.println("Crawling data for you requirements: ");
-        fetchDataFromCheapFlight(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
-        fetchDataFromKayak(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
-        fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numRooms),Integer.toString(numPerson));
+        //fetchDataFromCheapFlight(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
+        //fetchDataFromKayak(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
+        //fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numRooms),Integer.toString(numPerson));
 
         System.out.println("Printing how much much times your search city is appeared in our crawling of data. ");
         Map<String, Integer> wordAppearenceFrequency = frequencyCountFunction(searchTitle);
@@ -166,7 +159,7 @@ public class Main {
         String emailOfUser ;
         do {
             System.out.print("Enter Your Email so we can send you bestd deals: ");
-            emailOfUser = scanner.nextLine();
+            emailOfUser = scanner.next();
             if (!(isValidEmail(emailOfUser))) {
                 System.out.println("Invalid email.");
             }
@@ -174,9 +167,8 @@ public class Main {
                 int kload = 5;
                 bestUrl = bestUrl.replace("com", "csv");
                 HotelInfoClass[] hi = loadKObjectFromCSV(bestUrl, kload);
-
                 try {
-                    JavaMailUtil.sendMail(emailOfUser,hi,kload);
+                    //JavaMailUtil.sendMail(emailOfUser,hi,kload);
                 } catch (Exception e) {
                     System.out.println("An error occurred while sending the email: " + e.getMessage());
                 }finally {
@@ -186,6 +178,16 @@ public class Main {
         } while (true);
 
         // TODO: Inverted Indexing Implementation.
+        System.out.println("Welcome to filtering section....[Price Based filtering..]");
+        bestUrl = bestUrl.replace("com", "csv");
+        PriceRangeFiletering.runProgram(bestUrl);
+
+        // TODO : Find pattern in file.
+
+        bestUrl = bestUrl.replace("com", "csv");
+        System.out.println("Enter regural Expression you want to search, like deals with `very good`, `poor`");
+        String regex = scanner.next();
+        FindPatternInFile.readFile(bestUrl,regex);
 
         // Closing the scanner
         scanner.close();
@@ -197,34 +199,11 @@ public class Main {
         return pattern.matcher(email).matches();
     }
 
-    private static void printMostSearchCities(Path dirpath,int k) {
-        MaxHeapFromCSV.MaxHeap maxHeap = new MaxHeapFromCSV.MaxHeap();
-        String csvFile = dirpath.toString() +"/city_search_frequencies.csv";
-        String line = "";
-        String csvSplitBy = ",";
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            while ((line = br.readLine()) != null) {
-                String[] data = line.split(csvSplitBy);
-                String word = data[0].trim();
-                int value = Integer.parseInt(data[1].replace("\"","").trim());
-                maxHeap.insert(word, value);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Delete and print max element
-        for (int i = 0; i < k; i++) {
-            MaxHeapFromCSV.HeapEntry maxEntry = maxHeap.deleteMax();
-            if (maxEntry != null) {
-                System.out.println(maxEntry.word );
-            } else {
-                System.out.println("Heap is empty.");
-            }
-        }
-    }
+
+
+
 
     public static void main(String[] args) {
-
 
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(),"assets");
@@ -232,16 +211,10 @@ public class Main {
         String filepathForBook1 = dirpath.toString() +"/Book1.xlsx";
         System.out.println(filepathForBook1);
 
-
-
         List<String> filePaths = new ArrayList<>();
         filePaths.add(filepathForBook1);
 
         menu(filePaths,dirpath);
-
-
-
-
     }
 
 

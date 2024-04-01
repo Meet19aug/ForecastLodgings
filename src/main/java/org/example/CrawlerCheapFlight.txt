@@ -80,7 +80,7 @@ public class CrawlerCheapFlight {
                 System.out.println("Ratings in words is : "+ ratingInWords);
 
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
-                obj.saveObjectToCSV("cheapflight.csv");
+                obj.saveObjectToCSV("cheapflights.csv");
 
 
             } catch (Exception e) {

@@ -96,7 +96,7 @@ public class CrawlerCheapFlight {
                 System.out.println("Crawling for one element done...");
             }
         }
-        //driver.close();
+        driver.quit();
 
     }
 

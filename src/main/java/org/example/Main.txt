@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 import static org.example.CrawlerBooking.fetchDataFromBooking;
 import static org.example.CrawlerCheapFlight.fetchDataFromCheapFlight;
-import static org.example.EditDistance.exe2a;
+import static org.example.EditDistanceSpellCheck.exe2a;
 import static org.example.FrequencyCountOfWord.*;
 import static org.example.HotelInfoClass.loadKObjectFromCSV;
 import static org.example.CrawlerKayak.fetchDataFromKayak;

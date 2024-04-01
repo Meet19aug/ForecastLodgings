@@ -19,6 +19,7 @@
             <artifactId>poi-ooxml</artifactId>
             <version>5.2.4</version>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api -->
         <dependency>
             <groupId>jakarta.mail</groupId>
