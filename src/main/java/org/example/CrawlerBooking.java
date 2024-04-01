@@ -68,7 +68,7 @@ public class CrawlerBooking {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			driver.quit();
+			//driver.quit();
 		}
 	}
 
@@ -79,12 +79,11 @@ public class CrawlerBooking {
 			e.printStackTrace();
 		}
 
-		if (isElementPresent(driver, By.xpath("//button[@aria-label=\"Previous month\"]"))) {
+		if(isElementPresent(driver, By.xpath("//button[@aria-label=\"Next month\"]"))) {
 			System.out.println("Element is present.");
 		} else {
 			System.out.println("Element is not present.");
 			driver.findElement(By.xpath("//div[@data-testid=\"searchbox-dates-container\"]")).click();
-
 		}
 
 		String[] inDate = checkInDate.split("-");
@@ -240,6 +239,9 @@ public class CrawlerBooking {
 
 		for (int i = 0; i < listings.size(); i++) {
 			WebElement listing = listings.get(i);
+			if(i>5){
+				break;
+			}
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

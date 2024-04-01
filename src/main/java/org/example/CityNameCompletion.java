@@ -1,53 +1,60 @@
 package org.example;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-//TrieNode1 class represents a node in the Trie data structure
-class NodeOfTrie1 {
+// Represents a node in the Trie data structure
+class TrieNode {
     char data;
     boolean isEndOfWord;
-    NodeOfTrie1[] children;
+    TrieNode[] children;
 
-    public NodeOfTrie1(char data) {
+    // Constructor to initialize a TrieNode
+    public TrieNode(char data) {
         this.data = data;
         this.isEndOfWord = false;
-        this.children = new NodeOfTrie1[26]; // Assuming only lowercase alphabetical characters
+        this.children = new TrieNode[26];
+// Assuming only lowercase alphabetical characters
     }
 }
 
-//Trie class implements the Trie data structure
-class DSTrie {
-    private final NodeOfTrie1 rt;
+// Implements the Trie data structure
+class Trie {
+    private final TrieNode root;
 
-    public DSTrie() {
-        rt = new NodeOfTrie1('\0');
+    // Constructor to initialize the Trie
+    public Trie() {
+        root = new TrieNode('\0');
+// Initialize root node with null character
     }
 
-    // Insert a word into the Trie
-    public void wordInsert(String word) {
-        NodeOfTrie1 current = rt;
+    // Inserts a word into the Trie
+    public void insert(String word) {
+        TrieNode current = root;
 
+// Traverse through each character in the word
         for (char ch : word.toCharArray()) {
-            int idx = ch - 'a';
+            int idx = ch - 'a'; // Calculate index based on character's ASCII value
             if (current.children[idx] == null) {
-                current.children[idx] = new NodeOfTrie1(ch);
+                current.children[idx] = new TrieNode(ch);
+// Create a new node if it doesn't exist
             }
             current = current.children[idx];
+// Move to the next node
         }
 
         current.isEndOfWord = true;
+// Mark the last node as end of word
     }
 
-    // Suggest words based on a given prefix
-    public int suggestWords(String prefix,String originalword) {
-        NodeOfTrie1 prefixNode = nodeFinding(prefix);
+    // Suggests words based on a given prefix
+    public int suggestWords(String prefix, String originalWord) {
+        TrieNode prefixNode = findNode(prefix);
 
         if (prefixNode != null) {
-            return suggestWordsHelper(prefix, prefixNode,originalword);
+            return suggestWordsHelper(prefix, prefixNode, originalWord);
         } else {
             System.out.println("No suggestions for the given prefix.");
             return 1;
@@ -55,11 +62,12 @@ class DSTrie {
     }
 
     // Helper method to search for a node in the Trie
-    private NodeOfTrie1 nodeFinding(String wd) {
-        NodeOfTrie1 current = rt;
+    private TrieNode findNode(String word) {
+        TrieNode current = root;
 
-        for (char ch : wd.toCharArray()) {
-            int index = ch - 'a';
+// Traverse through each character in the word
+        for (char ch : word.toCharArray()) {
+            int index = ch - 'a'; // Calculate index based on character's ASCII value
             current = current.children[index];
             if (current == null) {
                 return null; // Prefix not found
@@ -70,50 +78,63 @@ class DSTrie {
     }
 
     // Helper method to recursively suggest words
-    private int suggestWordsHelper(String prefix, NodeOfTrie1 node,String originalWord) {
+    private int suggestWordsHelper(String prefix, TrieNode node, String originalWord) {
         if (node.isEndOfWord) {
-            if(originalWord==prefix){
-                return 3;
+// Check if the suggested word is the same as the original word
+            if (originalWord.equals(prefix)) {
+                return 3; // Return code 3 if the suggested word is the same as the original word
             }
-            System.out.println(prefix);
-            return 0;
+            System.out.println(prefix); // Print the suggested word
+            return 0; // Return code 0 for successful suggestion
         }
 
+// Iterate through each child node
         for (int i = 0; i < 26; i++) {
             if (node.children[i] != null) {
-                int x = suggestWordsHelper(prefix + node.children[i].data, node.children[i],originalWord);
+                int x = suggestWordsHelper(prefix + node.children[i].data, node.children[i], originalWord); // Recursively suggest words
             }
         }
-        return 0;
+        return 0; // Return code 0 for successful suggestion
     }
 }
 
+// Main class for city name completion functionality
 public class CityNameCompletion {
     public static void main(String[] args) {
-
-        String searchTitle= "win"; // Works for only small words.
+// Define the prefix to search for
+        String searchTitle = "win";
         System.out.println("User Entered word is : " + searchTitle);
-        DSTrie trie = new DSTrie();
+
+// Initialize a Trie
+        Trie trie = new Trie();
+
+// Get the current directory path
         Path currentPath = Paths.get(System.getProperty("user.dir"));
-        Path dirpath = Paths.get(currentPath.toString(),"assets");
-        String filePath = dirpath.toString() +"/Book1.xlsx";
+
+// Define the path to the Excel file containing city names
+        Path dirPath = Paths.get(currentPath.toString(), "assets");
+        String filePath = dirPath.toString() + "/Book1.xlsx";
+
+// Create a list to store file paths
         List<String> filePaths = new ArrayList<>();
         filePaths.add(filePath);
 
+// Read data from Excel file and insert city names into the Trie
         List<Map<String, String>> products = FetchDataFromExcel.readData(filePaths);
         for (Map<String, String> product : products) {
             String title = product.get("City");
             String[] titleWords = title.split("\\s+");
             for (String titleWord : titleWords) {
-                // For simplicity, remove non-alphabetic characters
+// Remove non-alphabetic characters and convert to lowercase
                 titleWord = titleWord.replaceAll("[^a-zA-Z]", "").toLowerCase();
                 if (!titleWord.isEmpty()) {
-                    trie.wordInsert(titleWord);
+                    trie.insert(titleWord); // Insert the word into the Trie
                 }
             }
         }
-        int x =trie.suggestWords(searchTitle, searchTitle);
+
+// Suggest words based on the prefix and print the result
+        int x = trie.suggestWords(searchTitle, searchTitle);
         System.out.println(x);
     }
-
 }
