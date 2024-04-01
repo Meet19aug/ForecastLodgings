@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.example.DateRelatedFunctions.getMonthName;
 import static org.example.DateRelatedFunctions.getMonthValue;
@@ -60,7 +61,7 @@ public class CrawlerBooking {
 			selectNumberOfRoomsAndSubmit(driver, numberOfRooms);
 			Thread.sleep(2500);
 
-			crawlListingsAndStoreDataForBooking(driver);
+			crawlListingsAndStoreDataForBooking(driver,destination);
 
 			System.out.println("\n**********************************************************************************************\n");
 
@@ -77,8 +78,14 @@ public class CrawlerBooking {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//String xpathToDateBox = "//div[@data-testid=\"searchbox-dates-container\"]";
-		//driver.findElement(By.id(xpathToDateBox)).click();
+
+		try{
+			String xpathToCheckButton = "//button[@aria-label=\"Previous month\"]";
+			driver.findElement(By.id("xpathToCheckButton"));
+		}catch (NoSuchElementException e){
+			String xpathToDateBox = "//div[@data-testid=\"searchbox-dates-container\"]";
+			driver.findElement(By.id(xpathToDateBox)).click();
+		}
 
 		String[] inDate = checkInDate.split("-");
 
@@ -207,7 +214,7 @@ public class CrawlerBooking {
 
 	}
 
-	private static void crawlListingsAndStoreDataForBooking(WebDriver driver) {
+	private static void crawlListingsAndStoreDataForBooking(WebDriver driver,String destination) {
 		System.out.println("crawlListingsAndStoreDataForBooking");
 
 		try {
@@ -229,8 +236,6 @@ public class CrawlerBooking {
 		}
 
 		for (int i = 0; i < listings.size(); i++) {
-
-
 			WebElement listing = listings.get(i);
 			try {
 				Thread.sleep(1000);
@@ -242,24 +247,33 @@ public class CrawlerBooking {
 				// Extract data from the listing as strings
 				String linkToHotel = listing.findElement(By.xpath(".//div[1]/div/div[1]/div/h3/a")).getAttribute("href");
 				System.out.println("Link to Rooms: " + linkToHotel);
+				linkToHotel = linkToHotel.trim();
 				String titleOfHotel = listing.findElement(By.xpath(".//div[1]/div/div[1]/div/h3/a/div[1]")).getText();
+				titleOfHotel = titleOfHotel.trim();
 				System.out.println("titleOfHotel: " + titleOfHotel);
 				String priceOfHotel = listing.findElement(By.xpath(".//div[1]/div[2]/div/div[2]/div[2]/div/div[1]/span")).getText();
 				System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+				priceOfHotel = priceOfHotel.trim();
 				String ratingOfHotel = listing.findElement(By.xpath(".//div[1]/div[2]/div/div[1]/div[2]/div/div/a/span/div/div[1]")).getText();
 				System.out.println("Rating Of Hotel is : " + ratingOfHotel);
+				ratingOfHotel = ratingOfHotel.trim();
 				String ratingInWords = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[1]")).getText();
-				System.out.println("Ratings in words is : "+ ratingInWords);
+				System.out.println("Ratings in words is : " + ratingInWords);
+				ratingInWords = ratingInWords.trim();
 				String numberOfReview = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[2]")).getText();
-				System.out.println("Number of Review is : "+ numberOfReview);
+				System.out.println("Number of Review is : " + numberOfReview);
+				numberOfReview = numberOfReview.trim();
 
-				HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
+				ratingOfHotel = HotelInfoClass.extractScore(ratingOfHotel);
+
+				priceOfHotel = HotelInfoClass.convertToNumeric(priceOfHotel);
+
+				HotelInfoClass obj = new HotelInfoClass(titleOfHotel, linkToHotel, priceOfHotel, ratingOfHotel, ratingInWords);
 				obj.saveObjectToCSV("booking.csv");
 
 			} catch (Exception e) {
 				System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
-			}
-			finally {
+			} finally {
 				System.out.println("Competed the crawling for Booking.com");
 			}
 		}

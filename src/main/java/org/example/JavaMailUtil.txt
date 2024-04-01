@@ -8,6 +8,8 @@ import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
+import static org.example.HotelInfoClass.loadKObjectFromCSV;
+
 
 public class JavaMailUtil {
 
@@ -20,8 +22,8 @@ public class JavaMailUtil {
             properties.put("mail.smtp.port", "587");
             properties.put("mail.smtp.starttls.enable", true);
 
-            String myAccountEmail = "meetpatel";
-            String password = "opuyjybawdslcxxr";
+            String myAccountEmail = "meetpatelaug";
+            String password = "heojlgggehmlglsw";
 
             Session session = Session.getInstance(properties, new Authenticator() {
                 @Override
@@ -29,15 +31,14 @@ public class JavaMailUtil {
                     return new PasswordAuthentication(myAccountEmail, password);
                 }
             });
-            String messToSend = new String();
+            String messToSend = "";
             for (int i = 0; i < kload; i++) {
                 messToSend+=hi[i].toString();
                 messToSend=messToSend+"\n";
             }
-
             Message message = prepareMessage(session, myAccountEmail, recipient,messToSend);
             if (message != null) {
-//                session.setDebug(true);
+                session.setDebug(true);
                 Transport.send(message);
                 System.out.println("Message sent successfully to " + recipient);
             } else {
@@ -64,7 +65,10 @@ public class JavaMailUtil {
 
     public static void main(String[] args) {
         try {
-            //JavaMailUtil.txt.sendMail("meetpatel19aug@gmail.com");
+            int kload=5;
+            HotelInfoClass[] hi = loadKObjectFromCSV("cheapflights.csv", kload);
+            System.out.println(hi[0].toString());
+            JavaMailUtil.sendMail("meetpatel19aug@gmail.com",hi,kload);
         } catch (Exception e) {
             System.out.println("An error occurred while sending the email: " + e.getMessage());
         }

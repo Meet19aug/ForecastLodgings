@@ -3,6 +3,8 @@ package org.example;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HotelInfoClass implements Comparable<HotelInfoClass> {
     String hotelName;
@@ -10,7 +12,6 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
     String ratingNumber;
     String ratingWord;
     String priceOfHotel;
-
     HotelInfoClass(){
     }
 
@@ -90,11 +91,29 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
             System.err.println("Error writing to the file: " + e.getMessage());
         }
     }
+    public static String convertToNumeric(String input) {
+        // Remove all non-numeric characters
+        String numericString = input.replaceAll("[^\\d]", "");
+        return numericString;
+    }
+    public static String extractScore(String input) {
+        // Define a regular expression pattern to match a decimal number
+        Pattern pattern = Pattern.compile("\\b\\d+\\.\\d+\\b");
+        Matcher matcher = pattern.matcher(input);
+
+        // Find the first match
+        if (matcher.find()) {
+            return matcher.group();
+        } else {
+            return null; // Return null if no match found
+        }
+    }
+
     public static HotelInfoClass[] loadKObjectFromCSV(String filename, int maxExtract) {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(), "assets");
         filename = dirpath.toString() + "/" + filename;
-        System.out.println("LoadKObjectFromCSV" + filename);
+        System.out.println("LoadKObjectFromCSV : " + filename);
         HotelInfoClass[] hotelsdata = new HotelInfoClass[maxExtract];
         for (int i = 0; i < maxExtract; i++) {
             hotelsdata[i]=new HotelInfoClass();
@@ -123,6 +142,7 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
                             hotelsdata[cnt].setRatingWord(data[4].replace("\"", ""));
                             cnt++;
                         }
+                        System.out.println("---------");
                     }else{
                         return hotelsdata;
                     }
@@ -135,7 +155,6 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
         }
         return null; // Return null if something goes wrong
     }
-
 
     @Override
     public int compareTo(HotelInfoClass o) {

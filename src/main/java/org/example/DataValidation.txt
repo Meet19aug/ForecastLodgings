@@ -1,0 +1,55 @@
+package org.example;
+
+import java.util.regex.Pattern;
+import java.time.LocalDate;
+
+public class DataValidation {
+
+    public static boolean isValidDate(String startDate) {
+        // Check the date format using regex
+        if (!startDate.matches("\\d{4}-(0[1-9]|1[0-2])-\\d{2}")) {
+            return false;
+        }
+
+        // Check if the day value is valid for the month
+        try {
+            // Parse the date string into a LocalDate object for further validation
+            LocalDate date = LocalDate.parse(startDate);
+            int day = date.getDayOfMonth();
+            int month = date.getMonthValue();
+            int year = date.getYear();
+            // Check February for leap years
+            if (month == 2) {
+                if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+                    System.out.println("--");
+                    return (day <= 29); // Leap year, February has 29 days
+                } else {
+                    return day <= 28; // Non-leap year, February has 28 days
+                }
+            }
+
+            // Check months with 30 days
+            if (month == 4 || month == 6 || month == 9 || month == 11) {
+                return day <= 30;
+            }
+
+            // All other months have 31 days
+            return day <= 31;
+        }catch (Exception e){
+            return false;
+        }
+
+
+    }
+    public static boolean isValidEmail(String email) {
+        final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        final Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        return pattern.matcher(email).matches();
+    }
+
+    public static void main(String[] args) {
+        String datecheck="2004-02-30";
+        System.out.println(isValidDate(datecheck));
+
+    }
+}

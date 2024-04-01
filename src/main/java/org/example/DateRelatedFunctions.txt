@@ -4,14 +4,13 @@ import java.time.Month;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DateFunctions {
+public class DateRelatedFunctions {
     private static Map<String, Integer> monthToInt = new HashMap<>();
     public static String getMonthName(int monthNumber) {
         return Month.of(monthNumber).name();
     }
 
     static {
-
         monthToInt.put("January", 1);
         monthToInt.put("February", 2);
         monthToInt.put("March", 3);
