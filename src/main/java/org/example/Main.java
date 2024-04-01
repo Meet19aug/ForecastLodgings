@@ -4,11 +4,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
+
+import static org.example.CrawlerBooking.fetchDataFromBooking;
+import static org.example.CrawlerCheapFlight.fetchDataFromCheapFlight;
 import static org.example.EditDistanceSpellCheck.exe2a;
-import static org.example.FrequencyCountOfWord.*;
+import static org.example.FrequencyCountOfWord.frequencyCountFunction;
 import static org.example.HotelInfoClass.loadKObjectFromCSV;
 import static org.example.PageRanking.mostSuitablePageURL;
 
@@ -82,7 +87,7 @@ public class Main {
         do {
             System.out.print("Enter start date (YYYY-MM-DD): ");
             startDate = scanner.nextLine().trim();
-            if (DataValidation.isValidDate(startDate)) {
+            if (!DataValidation.isValidDate(startDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
             }
@@ -100,7 +105,7 @@ public class Main {
         do {
             System.out.print("Enter end date (YYYY-MM-DD): ");
             endDate = scanner.nextLine().trim();
-            if (DataValidation.isValidDate(endDate)) {
+            if (!DataValidation.isValidDate(endDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
             }
@@ -142,9 +147,9 @@ public class Main {
 
 
         System.out.println("Crawling data for you requirements: ");
-        //fetchDataFromCheapFlight(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
-        //fetchDataFromKayak(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
-        //fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numRooms),Integer.toString(numPerson));
+        fetchDataFromCheapFlight(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
+        CrawlerKayak.fetchDataFromKayak(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
+        fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numRooms),Integer.toString(numPerson));
 
         System.out.println("Printing how much much times your search city is appeared in our crawling of data. ");
         Map<String, Integer> wordAppearenceFrequency = frequencyCountFunction(searchTitle);
@@ -182,26 +187,14 @@ public class Main {
         PriceRangeFiletering.runProgram(bestUrl);
 
         // TODO : Find pattern in file.
-
         bestUrl = bestUrl.replace("com", "csv");
         System.out.println("Enter regural Expression you want to search, like deals with `very good`, `poor`");
         String regex = scanner.next();
         FindPatternInFile.readFile(bestUrl,regex);
-
         // Closing the scanner
         scanner.close();
-
     }
-
-
-
-
-
-
-
-
     public static void main(String[] args) {
-
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(),"assets");
 

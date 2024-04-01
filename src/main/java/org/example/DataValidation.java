@@ -48,7 +48,7 @@ public class DataValidation {
     }
 
     public static void main(String[] args) {
-        String datecheck="2004-02-30";
+        String datecheck="2004-12-31";
         System.out.println(isValidDate(datecheck));
 
     }

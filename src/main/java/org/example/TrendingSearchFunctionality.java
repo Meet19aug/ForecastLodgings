@@ -36,7 +36,9 @@ public class TrendingSearchFunctionality {
     public static void updateFrequency(String csvFile, String word) {
         boolean updated = false;
         List<String[]> rows = new ArrayList<>();
-
+        Path currentPath = Paths.get(System.getProperty("user.dir"));
+        Path dirpath = Paths.get(currentPath.toString(),"assets");
+        csvFile = dirpath+"/"+csvFile;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             String line;
             while ((line = br.readLine()) != null) {

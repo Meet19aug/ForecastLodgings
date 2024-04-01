@@ -79,12 +79,12 @@ public class CrawlerBooking {
 			e.printStackTrace();
 		}
 
-		try{
-			String xpathToCheckButton = "//button[@aria-label=\"Previous month\"]";
-			driver.findElement(By.id("xpathToCheckButton"));
-		}catch (NoSuchElementException e){
-			String xpathToDateBox = "//div[@data-testid=\"searchbox-dates-container\"]";
-			driver.findElement(By.id(xpathToDateBox)).click();
+		if (isElementPresent(driver, By.xpath("//button[@aria-label=\"Previous month\"]"))) {
+			System.out.println("Element is present.");
+		} else {
+			System.out.println("Element is not present.");
+			driver.findElement(By.xpath("//div[@data-testid=\"searchbox-dates-container\"]")).click();
+
 		}
 
 		String[] inDate = checkInDate.split("-");
@@ -151,6 +151,9 @@ public class CrawlerBooking {
 			e.printStackTrace();
 		}
 
+	}
+	public static boolean isElementPresent(WebDriver driver, By locator) {
+		return !driver.findElements(locator).isEmpty();
 	}
 
 	public static String capitalize(String str) {
