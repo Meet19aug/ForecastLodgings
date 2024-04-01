@@ -42,7 +42,8 @@ public class FindPatternInFile {
     public static void main(String[] args) {
 
         String fileName = "cheapflights.csv"; // Specify the path to your input file
-        String regex = "poor";
+        String regex = "https://[^\\s]*jBCEG-Ty9A&pm[^\\s]*";
+        System.out.println("Word `"+regex+"` appearence found using regEx in cralwled data of "+ fileName.replace(".csv","") );
         readFile(fileName,regex);
     }
 }

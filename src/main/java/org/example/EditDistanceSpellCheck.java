@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 public class EditDistanceSpellCheck {
     public static void main(String[] args) {
         String searchTitle="windsedadf";
+        System.out.println("User Entered word is : " + searchTitle);
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(),"assets");
         String filepathForCities = dirpath.toString() + "/cityname.txt";
@@ -121,4 +122,5 @@ public class EditDistanceSpellCheck {
 
         return sortedMap_mp;
     }
+
 }

@@ -42,7 +42,6 @@ public class CrawlerCheapFlight {
             e.printStackTrace();
         }
 
-
         List<WebElement> listings = driver.findElements(By.xpath(fullContainerXPath));
         for(WebElement listing : listings){
             System.out.println(listing.getText());

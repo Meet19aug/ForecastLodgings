@@ -24,10 +24,11 @@ public class TrendingSearchFunctionality {
             e.printStackTrace();
         }
         // Delete and print max element
+        System.out.println("Most Search Cities are: ");
         for (int i = 0; i < k; i++) {
             MaxHeapFromCSV.HeapEntry maxEntry = maxHeap.deleteMax();
             if (maxEntry != null) {
-                System.out.println(maxEntry.word );
+                System.out.println(maxEntry.word+ " - ("+ maxEntry.value + ")");
             } else {
                 System.out.println("Heap is empty.");
             }

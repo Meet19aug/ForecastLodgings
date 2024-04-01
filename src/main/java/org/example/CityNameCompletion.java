@@ -92,6 +92,7 @@ public class CityNameCompletion {
     public static void main(String[] args) {
 
         String searchTitle= "win"; // Works for only small words.
+        System.out.println("User Entered word is : " + searchTitle);
         DSTrie trie = new DSTrie();
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(),"assets");
@@ -100,7 +101,6 @@ public class CityNameCompletion {
         filePaths.add(filePath);
 
         List<Map<String, String>> products = FetchDataFromExcel.readData(filePaths);
-        System.out.println(products+"\t\t"+"hello");
         for (Map<String, String> product : products) {
             String title = product.get("City");
             String[] titleWords = title.split("\\s+");
@@ -112,7 +112,6 @@ public class CityNameCompletion {
                 }
             }
         }
-        System.out.println("hello");
         int x =trie.suggestWords(searchTitle, searchTitle);
         System.out.println(x);
     }

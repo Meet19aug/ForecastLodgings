@@ -21,7 +21,6 @@ public class DataValidation {
             // Check February for leap years
             if (month == 2) {
                 if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
-                    System.out.println("--");
                     return (day <= 29); // Leap year, February has 29 days
                 } else {
                     return day <= 28; // Non-leap year, February has 28 days
@@ -48,8 +47,35 @@ public class DataValidation {
     }
 
     public static void main(String[] args) {
-        String datecheck="2004-12-31";
-        System.out.println(isValidDate(datecheck));
+        String datecheck="2004-02-29";
+        System.out.println("Date given for checking is: "+datecheck);
+        System.out.println("Result is : " + isValidDate(datecheck));
+        datecheck = "2004-ew-10";
+        System.out.println("Date given for checking is: "+datecheck);
+        System.out.println("Result is : " + isValidDate(datecheck));
+        datecheck = "2004-02-30";
+        System.out.println("Date given for checking is: "+datecheck);
+        System.out.println("Result is : " + isValidDate(datecheck));
+        datecheck = "2004-13-01";
+        System.out.println("Date given for checking is: "+datecheck);
+        System.out.println("Result is : " + isValidDate(datecheck));
+        datecheck = "2004-01-32";
+        System.out.println("Date given for checking is: "+datecheck);
+        System.out.println("Result is : " + isValidDate(datecheck));
+        String emailTest="abc.com";
+        System.out.println("Date given for checking is: "+emailTest);
+        System.out.println("Result is : "+ isValidEmail(emailTest));
+        emailTest="abc@com";
+        System.out.println("Date given for checking is: "+emailTest);
+        System.out.println("Result is : "+ isValidEmail(emailTest));
+        emailTest="abc@c123om";
+        System.out.println("Date given for checking is: "+emailTest);
+        System.out.println("Result is : "+ isValidEmail(emailTest));
+        emailTest="abc@abc.com";
+        System.out.println("Date given for checking is: "+emailTest);
+        System.out.println("Result is : "+ isValidEmail(emailTest));
+
+
 
     }
 }

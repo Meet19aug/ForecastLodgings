@@ -22,15 +22,14 @@ public class FrequencyCountOfWord {
         int frequencyInKayak = getFrequencyOfWord(wordFrequencyMapKayak, searchTitle);
         int frequencyInCheapFlight = getFrequencyOfWord(wordFrequencyMapChaepFlight, searchTitle);
 
-        System.out.println("Frequency of '" + searchTitle + " in booking.com is " + frequencyInBooking + " .");
-        System.out.println("Frequency of '" + searchTitle + " in kayak.com is " + frequencyInKayak + " .");
-        System.out.println("Frequency of '" + searchTitle + " in cheapflight.com is " + frequencyInCheapFlight + " .");
+        System.out.println("Frequency of `" + searchTitle + "` in booking.com is " + frequencyInBooking + " .");
+        System.out.println("Frequency of `" + searchTitle + "` in kayak.com is " + frequencyInKayak + " .");
+        System.out.println("Frequency of `" + searchTitle + "` in cheapflight.com is " + frequencyInCheapFlight + " .");
         Map<String,Integer> results = new HashMap<String, Integer>() {{
             put("booking.com", frequencyInBooking);
             put("kayak.com", frequencyInKayak);
             put("cheapflights.com", frequencyInCheapFlight);
         }};
-        System.out.println(results);
         return results;
     }
     public static Map<String, Integer> readDataFromCSV(String filename) {
@@ -60,6 +59,6 @@ public class FrequencyCountOfWord {
     }
 
     public static void main(String[] args) {
-        System.out.println(frequencyCountFunction("windsor").get("cheapflights.com"));
+        frequencyCountFunction("windsor").get("cheapflights.com");
     }
 }

@@ -49,10 +49,10 @@ public class Main {
 
 
         boolean menu = true;
-        System.out.println("Most Search Cities are: ");
         TrendingSearchFunctionality.printMostSearchCities(dirpath,kth);
+        System.out.println("Enter \"exit\"  anywhere to exit.");
         while (menu) {
-            System.out.println("Enter \"exit\" to exit.");
+
             do {
                 System.out.print("Enter the city to search for: ");
                 searchTitle = scanner.nextLine();
@@ -87,6 +87,11 @@ public class Main {
         do {
             System.out.print("Enter start date (YYYY-MM-DD): ");
             startDate = scanner.nextLine().trim();
+            if ("exit".equalsIgnoreCase(startDate)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }
             if (!DataValidation.isValidDate(startDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
@@ -105,6 +110,11 @@ public class Main {
         do {
             System.out.print("Enter end date (YYYY-MM-DD): ");
             endDate = scanner.nextLine().trim();
+            if ("exit".equalsIgnoreCase(endDate)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }
             if (!DataValidation.isValidDate(endDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
@@ -125,7 +135,12 @@ public class Main {
             while (!scanner.hasNextInt()) {
                 System.out.println("Please enter a valid number for rooms.");
                 System.out.print("Enter number of rooms: ");
-                scanner.next();
+                String x = scanner.next();
+                if ("exit".equalsIgnoreCase(x)) {
+                    System.out.println("Exiting..");
+                    menu = false;
+                    return;
+                }
             }
             numRooms = scanner.nextInt();
         } while (numRooms <= 0);
@@ -137,7 +152,12 @@ public class Main {
             while (!scanner.hasNextInt()) {
                 System.out.println("Please enter a valid number for adults.");
                 System.out.print("Enter number of adults: ");
-                scanner.next();
+                String x = scanner.next();
+                if ("exit".equalsIgnoreCase(x)) {
+                    System.out.println("Exiting..");
+                    menu = false;
+                    return;
+                }
             }
             numPerson = scanner.nextInt();
         } while (numPerson <= 0);
@@ -155,8 +175,7 @@ public class Main {
         Map<String, Integer> wordAppearenceFrequency = frequencyCountFunction(searchTitle);
 
         // DONE: Use Frequency count to rank the pages.
-        // Rank the page on the based of sorting. - The entryList.sort(Map.Entry.comparingByKey()) statement uses a stable sorting algorithm, which typically is a variation of merge sort or a related algorithm.
-        // In Java, the Collections.sort() method, which entryList.sort() is effectively calling, uses a modified version of merge sort called TimSort
+        // Rank the page on the based of sorting. -
         String bestUrl = mostSuitablePageURL(wordAppearenceFrequency);
 
 
@@ -164,6 +183,11 @@ public class Main {
         do {
             System.out.print("Enter Your Email so we can send you bestd deals: ");
             emailOfUser = scanner.next();
+            if ("exit".equalsIgnoreCase(emailOfUser)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }
             if (!(DataValidation.isValidEmail(emailOfUser))) {
                 System.out.println("Invalid email.");
             }
@@ -189,8 +213,20 @@ public class Main {
         // TODO : Find pattern in file.
         bestUrl = bestUrl.replace("com", "csv");
         System.out.println("Enter regural Expression you want to search, like deals with `very good`, `poor`");
-        String regex = scanner.next();
-        FindPatternInFile.readFile(bestUrl,regex);
+
+        do{
+            String regex = scanner.next();
+            if ("exit".equalsIgnoreCase(regex)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }else{
+                FindPatternInFile.readFile(bestUrl,regex);
+                break;
+            }
+
+        }while(true);
+
         // Closing the scanner
         scanner.close();
     }
