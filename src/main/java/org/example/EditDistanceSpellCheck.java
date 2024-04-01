@@ -3,11 +3,23 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EditDistanceSpellCheck {
+    public static void main(String[] args) {
+        String searchTitle="windsedadf";
+        Path currentPath = Paths.get(System.getProperty("user.dir"));
+        Path dirpath = Paths.get(currentPath.toString(),"assets");
+        String filepathForCities = dirpath.toString() + "/cityname.txt";
+        int y = exe2a(searchTitle, filepathForCities);
+        if (y != 0) {
+            System.out.println("We suggested most 2 similar words now select one.");
+        }
+    }
     public static int editDistance(String word1, String word2) {
         int len1 = word1.length();
         int len2 = word2.length();

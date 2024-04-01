@@ -1,5 +1,11 @@
 package org.example;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 //TrieNode1 class represents a node in the Trie data structure
 class NodeOfTrie1 {
     char data;
@@ -83,5 +89,32 @@ class DSTrie {
 }
 
 public class CityNameCompletion {
+    public static void main(String[] args) {
+
+        String searchTitle= "win"; // Works for only small words.
+        DSTrie trie = new DSTrie();
+        Path currentPath = Paths.get(System.getProperty("user.dir"));
+        Path dirpath = Paths.get(currentPath.toString(),"assets");
+        String filePath = dirpath.toString() +"/Book1.xlsx";
+        List<String> filePaths = new ArrayList<>();
+        filePaths.add(filePath);
+
+        List<Map<String, String>> products = FetchDataFromExcel.readData(filePaths);
+        System.out.println(products+"\t\t"+"hello");
+        for (Map<String, String> product : products) {
+            String title = product.get("City");
+            String[] titleWords = title.split("\\s+");
+            for (String titleWord : titleWords) {
+                // For simplicity, remove non-alphabetic characters
+                titleWord = titleWord.replaceAll("[^a-zA-Z]", "").toLowerCase();
+                if (!titleWord.isEmpty()) {
+                    trie.wordInsert(titleWord);
+                }
+            }
+        }
+        System.out.println("hello");
+        int x =trie.suggestWords(searchTitle, searchTitle);
+        System.out.println(x);
+    }
 
 }

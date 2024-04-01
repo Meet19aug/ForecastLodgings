@@ -76,11 +76,6 @@ class InvertedIndex {
 public class PriceRangeFiletering {
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        String filename = "booking.csv";
-        runProgram(filename);
-    }
-
     public static void runProgram(String filename) {
         InvertedIndex index = new InvertedIndex();
 
@@ -199,6 +194,11 @@ public class PriceRangeFiletering {
                 System.out.println("********************************************");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        String filename = "booking.csv";
+        runProgram(filename);
     }
 }
 

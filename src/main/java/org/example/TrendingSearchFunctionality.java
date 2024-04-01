@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,5 +70,12 @@ public class TrendingSearchFunctionality {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        Path currentPath = Paths.get(System.getProperty("user.dir"));
+        Path dirpath = Paths.get(currentPath.toString(),"assets");
+        printMostSearchCities(dirpath,3);
+
     }
 }

@@ -57,8 +57,8 @@ public class FetchDataFromExcel {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(), "assets");
         String filename = dirpath.toString() + "/Book1.xlsx" ;
-
         filePaths.add(filename);
+
 
         List<Map<String, String>> cityList = readData(filePaths);
 

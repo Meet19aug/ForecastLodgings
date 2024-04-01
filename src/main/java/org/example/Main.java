@@ -72,7 +72,6 @@ public class Main {
                     int y = exe2a(searchTitle, filepathForCities);
                     if (y != 0) {
                         System.out.println("We suggested most 2 similar words now select one.");
-
                     }
                 }
             }
@@ -83,7 +82,7 @@ public class Main {
         do {
             System.out.print("Enter start date (YYYY-MM-DD): ");
             startDate = scanner.nextLine().trim();
-            if (!startDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            if (isValidDate(startDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
             }
@@ -101,7 +100,7 @@ public class Main {
         do {
             System.out.print("Enter end date (YYYY-MM-DD): ");
             endDate = scanner.nextLine().trim();
-            if (!endDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            if (isValidDate(endDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
             }
@@ -193,11 +192,18 @@ public class Main {
         scanner.close();
 
     }
+
+    private static boolean isValidDate(String startDate) {
+        return startDate.matches("\\d{4}-\\d{2}-\\d{2}");
+    }
+
     public static boolean isValidEmail(String email) {
         final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         final Pattern pattern = Pattern.compile(EMAIL_REGEX);
         return pattern.matcher(email).matches();
     }
+
+
 
 
 
