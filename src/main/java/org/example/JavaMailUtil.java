@@ -20,8 +20,12 @@ public class JavaMailUtil {
             Properties properties = new Properties();
             properties.put("mail.smtp.auth", true); // Enable SMTP authentication
             properties.put("mail.smtp.host", "smtp.gmail.com"); // Set SMTP host
-            properties.put("mail.smtp.port", "587"); // Set SMTP port
+
+            properties.put("mail.smtp.ssl.enable", "true");
             properties.put("mail.smtp.starttls.enable", true); // Enable STARTTLS encryption
+            properties.put("mail.smtp.port", "465"); // Set SMTP port -586
+
+
 
 // Sender email and password
             String myAccountEmail = "meetpatelaug"; // Replace with your email
@@ -46,7 +50,9 @@ public class JavaMailUtil {
 
 // Send the message
             if (message != null) {
-                session.setDebug(true); // Enable debugging for troubleshooting
+
+                session.setDebug(false); // Enable debugging for troubleshooting
+
                 Transport.send(message); // Send the email
                 System.out.println("Message sent successfully to " + recipient);
             } else {
@@ -81,8 +87,9 @@ public class JavaMailUtil {
         try {
             int kload = 5; // Number of hotels to load from CSV
             HotelInfoClass[] hotelInfo = loadKObjectFromCSV("cheapflights.csv", kload); // Load hotel info from CSV
-            System.out.println(hotelInfo[0].toString()); // Print the first hotel info for verification
-            JavaMailUtil.sendMail("meetpatel19aug@gmail.com", hotelInfo, kload); // Send email to recipient
+
+            JavaMailUtil.sendMail("meetpatel494494aug@gmail.com", hotelInfo, kload); // Send email to recipient
+
         } catch (Exception e) {
             System.out.println("An error occurred while sending the email: " + e.getMessage());
         }

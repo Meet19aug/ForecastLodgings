@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
 public class FindPatternInFile {
     // Function to read file line by line
     public static void readFile(String filename, String regex) {
+
+        System.out.println("RegEx " + regex +" found on following information or Data : ");
+
 // Get the current directory path
         Path currentPath = Paths.get(System.getProperty("user.dir"));
 // Specify the directory path for the assets folder

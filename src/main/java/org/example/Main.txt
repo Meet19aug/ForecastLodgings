@@ -4,11 +4,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
-import static org.example.EditDistanceSpellCheck.exe2a;
-import static org.example.FrequencyCountOfWord.*;
+
+import static org.example.CrawlerBooking.fetchDataFromBooking;
+import static org.example.CrawlerCheapFlight.fetchDataFromCheapFlight;
+import static org.example.EditDistanceSpellCheck.performSpellCheck;
+import static org.example.FrequencyCountOfWord.frequencyCountFunction;
 import static org.example.HotelInfoClass.loadKObjectFromCSV;
 import static org.example.PageRanking.mostSuitablePageURL;
 
@@ -28,7 +33,7 @@ public class Main {
         String searchTitle="";
         Scanner scanner = new Scanner(System.in);
         List<Map<String, String>> products = FetchDataFromExcel.readData(filePaths);
-        DSTrie trie = new DSTrie();
+        Trie trie = new Trie();
         for (Map<String, String> product : products) {
             String title = product.get("City");
             String[] titleWords = title.split("\\s+");
@@ -44,10 +49,10 @@ public class Main {
 
 
         boolean menu = true;
-        System.out.println("Most Search Cities are: ");
         TrendingSearchFunctionality.printMostSearchCities(dirpath,kth);
+        System.out.println("Enter \"exit\"  anywhere to exit.");
         while (menu) {
-            System.out.println("Enter \"exit\" to exit.");
+
             do {
                 System.out.print("Enter the city to search for: ");
                 searchTitle = scanner.nextLine();
@@ -69,7 +74,7 @@ public class Main {
                 }
                 if (x == 1) {
                     String filepathForCities = dirpath.toString() + "/cityname.txt";
-                    int y = exe2a(searchTitle, filepathForCities);
+                    int y = performSpellCheck(searchTitle, filepathForCities);
                     if (y != 0) {
                         System.out.println("We suggested most 2 similar words now select one.");
                     }
@@ -82,7 +87,12 @@ public class Main {
         do {
             System.out.print("Enter start date (YYYY-MM-DD): ");
             startDate = scanner.nextLine().trim();
-            if (DataValidation.isValidDate(startDate)) {
+            if ("exit".equalsIgnoreCase(startDate)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }
+            if (!DataValidation.isValidDate(startDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
             }
@@ -100,7 +110,12 @@ public class Main {
         do {
             System.out.print("Enter end date (YYYY-MM-DD): ");
             endDate = scanner.nextLine().trim();
-            if (DataValidation.isValidDate(endDate)) {
+            if ("exit".equalsIgnoreCase(endDate)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }
+            if (!DataValidation.isValidDate(endDate)) {
                 System.out.println("Invalid date format! Please use YYYY-MM-DD.");
                 continue;
             }
@@ -120,7 +135,12 @@ public class Main {
             while (!scanner.hasNextInt()) {
                 System.out.println("Please enter a valid number for rooms.");
                 System.out.print("Enter number of rooms: ");
-                scanner.next();
+                String x = scanner.next();
+                if ("exit".equalsIgnoreCase(x)) {
+                    System.out.println("Exiting..");
+                    menu = false;
+                    return;
+                }
             }
             numRooms = scanner.nextInt();
         } while (numRooms <= 0);
@@ -132,7 +152,12 @@ public class Main {
             while (!scanner.hasNextInt()) {
                 System.out.println("Please enter a valid number for adults.");
                 System.out.print("Enter number of adults: ");
-                scanner.next();
+                String x = scanner.next();
+                if ("exit".equalsIgnoreCase(x)) {
+                    System.out.println("Exiting..");
+                    menu = false;
+                    return;
+                }
             }
             numPerson = scanner.nextInt();
         } while (numPerson <= 0);
@@ -142,16 +167,15 @@ public class Main {
 
 
         System.out.println("Crawling data for you requirements: ");
-        //fetchDataFromCheapFlight(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
-        //fetchDataFromKayak(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
-        //fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numRooms),Integer.toString(numPerson));
+        fetchDataFromCheapFlight(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
+        CrawlerKayak.fetchDataFromKayak(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
+        fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numRooms),Integer.toString(numPerson));
 
         System.out.println("Printing how much much times your search city is appeared in our crawling of data. ");
         Map<String, Integer> wordAppearenceFrequency = frequencyCountFunction(searchTitle);
 
         // DONE: Use Frequency count to rank the pages.
-        // Rank the page on the based of sorting. - The entryList.sort(Map.Entry.comparingByKey()) statement uses a stable sorting algorithm, which typically is a variation of merge sort or a related algorithm.
-        // In Java, the Collections.sort() method, which entryList.sort() is effectively calling, uses a modified version of merge sort called TimSort
+        // Rank the page on the based of sorting. -
         String bestUrl = mostSuitablePageURL(wordAppearenceFrequency);
 
 
@@ -159,6 +183,11 @@ public class Main {
         do {
             System.out.print("Enter Your Email so we can send you bestd deals: ");
             emailOfUser = scanner.next();
+            if ("exit".equalsIgnoreCase(emailOfUser)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }
             if (!(DataValidation.isValidEmail(emailOfUser))) {
                 System.out.println("Invalid email.");
             }
@@ -182,26 +211,26 @@ public class Main {
         PriceRangeFiletering.runProgram(bestUrl);
 
         // TODO : Find pattern in file.
-
         bestUrl = bestUrl.replace("com", "csv");
         System.out.println("Enter regural Expression you want to search, like deals with `very good`, `poor`");
-        String regex = scanner.next();
-        FindPatternInFile.readFile(bestUrl,regex);
+
+        do{
+            String regex = scanner.next();
+            if ("exit".equalsIgnoreCase(regex)) {
+                System.out.println("Exiting..");
+                menu = false;
+                return;
+            }else{
+                FindPatternInFile.readFile(bestUrl,regex);
+                break;
+            }
+
+        }while(true);
 
         // Closing the scanner
         scanner.close();
-
     }
-
-
-
-
-
-
-
-
     public static void main(String[] args) {
-
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(),"assets");
 

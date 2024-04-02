@@ -24,7 +24,7 @@ public class TrendingSearchFunctionality {
             e.printStackTrace();
         }
         // Delete and print max element
-        System.out.println("Most Search Cities are: ");
+        System.out.println("********* Most Searched Destinations *********");
         for (int i = 0; i < k; i++) {
             MaxHeapFromCSV.HeapEntry maxEntry = maxHeap.deleteMax();
             if (maxEntry != null) {

@@ -12,19 +12,21 @@ import java.util.Scanner;
 
 import static org.example.CrawlerBooking.fetchDataFromBooking;
 import static org.example.CrawlerCheapFlight.fetchDataFromCheapFlight;
-import static org.example.EditDistanceSpellCheck.exe2a;
+import static org.example.EditDistanceSpellCheck.performSpellCheck;
 import static org.example.FrequencyCountOfWord.frequencyCountFunction;
 import static org.example.HotelInfoClass.loadKObjectFromCSV;
 import static org.example.PageRanking.mostSuitablePageURL;
 
 public class Main {
     private static void printingQueryValue(String searchTitle, String startDate, String endDate, int numRooms, int numPerson) {
-        System.out.println("\nHotel Reservation Details:");
+        System.out.println("\n");
+        System.out.println("******** Hotel Reservation Details: *********");
         System.out.println("City: " + searchTitle);
         System.out.println("Start Date: " + startDate);
         System.out.println("End Date: " + endDate);
         System.out.println("Number of Rooms: " + numRooms);
         System.out.println("Number of Person: " + numPerson);
+        System.out.println("******* Thank you for using our program. *******");
     }
 
     private static void menu(List<String> filePaths,Path dirpath) {
@@ -33,7 +35,7 @@ public class Main {
         String searchTitle="";
         Scanner scanner = new Scanner(System.in);
         List<Map<String, String>> products = FetchDataFromExcel.readData(filePaths);
-        DSTrie trie = new DSTrie();
+        Trie trie = new Trie();
         for (Map<String, String> product : products) {
             String title = product.get("City");
             String[] titleWords = title.split("\\s+");
@@ -47,10 +49,12 @@ public class Main {
         }
 
 
-
         boolean menu = true;
         TrendingSearchFunctionality.printMostSearchCities(dirpath,kth);
-        System.out.println("Enter \"exit\"  anywhere to exit.");
+        System.out.println("*************** General Guidline *************");
+        System.out.println("Enter \"exit\"  anywhere - in any prompt to exit.");
+        System.out.println("**********************************************");
+        System.out.println();
         while (menu) {
 
             do {
@@ -74,14 +78,14 @@ public class Main {
                 }
                 if (x == 1) {
                     String filepathForCities = dirpath.toString() + "/cityname.txt";
-                    int y = exe2a(searchTitle, filepathForCities);
+                    int y = performSpellCheck(searchTitle, filepathForCities);
                     if (y != 0) {
                         System.out.println("We suggested most 2 similar words now select one.");
+                        System.out.println("************************************************");
                     }
                 }
             }
         }
-
         // Validating start date input
         String startDate;
         do {
@@ -169,7 +173,7 @@ public class Main {
         System.out.println("Crawling data for you requirements: ");
         fetchDataFromCheapFlight(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
         CrawlerKayak.fetchDataFromKayak(searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
-        fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numRooms),Integer.toString(numPerson));
+        fetchDataFromBooking("https://www.booking.com/",searchTitle,startDate,endDate,Integer.toString(numPerson),Integer.toString(numRooms));
 
         System.out.println("Printing how much much times your search city is appeared in our crawling of data. ");
         Map<String, Integer> wordAppearenceFrequency = frequencyCountFunction(searchTitle);
@@ -181,40 +185,45 @@ public class Main {
 
         String emailOfUser ;
         do {
-            System.out.print("Enter Your Email so we can send you bestd deals: ");
+            System.out.print("Enter Your Email so we can send you best deals [type `no` if you don't want deals..] : ");
             emailOfUser = scanner.next();
             if ("exit".equalsIgnoreCase(emailOfUser)) {
                 System.out.println("Exiting..");
                 menu = false;
                 return;
             }
-            if (!(DataValidation.isValidEmail(emailOfUser))) {
-                System.out.println("Invalid email.");
-            }
-            else{
-                int kload = 5;
-                bestUrl = bestUrl.replace("com", "csv");
-                HotelInfoClass[] hi = loadKObjectFromCSV(bestUrl, kload);
-                try {
-                    //JavaMailUtil.sendMail(emailOfUser,hi,kload);
-                } catch (Exception e) {
-                    System.out.println("An error occurred while sending the email: " + e.getMessage());
-                }finally {
-                    break;
+            if ("No".equalsIgnoreCase(emailOfUser)) {
+                System.out.println("Thank you, we appreciate your option.");
+                menu = false;
+            }else {
+                if (!(DataValidation.isValidEmail(emailOfUser))) {
+                    System.out.println("Invalid email.");
+                    menu = true;
+                } else {
+                    int kload = 5;
+                    bestUrl = bestUrl.replace("com", "csv");
+                    HotelInfoClass[] hi = loadKObjectFromCSV(bestUrl, kload);
+                    try {
+                        JavaMailUtil.sendMail(emailOfUser, hi, kload);
+                    } catch (Exception e) {
+                        System.out.println("An error occurred while sending the email: " + e.getMessage());
+                    } finally {
+                        break;
+                    }
                 }
             }
-        } while (true);
+        } while (menu);
 
         // TODO: Inverted Indexing Implementation.
-        System.out.println("Welcome to filtering section....[Price Based filtering..]");
+        System.out.println("*********** Welcome to Price Based Filtering ***********");
         bestUrl = bestUrl.replace("com", "csv");
         PriceRangeFiletering.runProgram(bestUrl);
 
         // TODO : Find pattern in file.
         bestUrl = bestUrl.replace("com", "csv");
-        System.out.println("Enter regural Expression you want to search, like deals with `very good`, `poor`");
-
+        menu=true;
         do{
+            System.out.println("Enter regEx that you want to search, like deals with `very good`, `poor` or `https://[^\\s]*jBCEG-Ty9A&pm[^\\s]*`");
             String regex = scanner.next();
             if ("exit".equalsIgnoreCase(regex)) {
                 System.out.println("Exiting..");
@@ -222,10 +231,10 @@ public class Main {
                 return;
             }else{
                 FindPatternInFile.readFile(bestUrl,regex);
-                break;
+                menu=true;
             }
 
-        }while(true);
+        }while(menu);
 
         // Closing the scanner
         scanner.close();

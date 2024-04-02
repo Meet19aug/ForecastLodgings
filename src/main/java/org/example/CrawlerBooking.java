@@ -46,7 +46,7 @@ public class CrawlerBooking {
 				searchBox.sendKeys(Keys.BACK_SPACE);
 			}
 
-			searchBox.sendKeys(destination);
+			searchBox.sendKeys(destination + ",Canada");
 			Thread.sleep(3500);
 
 			searchBox.sendKeys(Keys.ENTER);
@@ -66,9 +66,11 @@ public class CrawlerBooking {
 			System.out.println("\n**********************************************************************************************\n");
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} finally {
-			//driver.quit();
+			System.out.println("Crawling completed for Booking.com.");
+			driver.quit();
+
 		}
 	}
 
@@ -76,13 +78,15 @@ public class CrawlerBooking {
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
-		if(isElementPresent(driver, By.xpath("//button[@aria-label=\"Next month\"]"))) {
-			System.out.println("Element is present.");
+
+		if (isElementPresent(driver, By.xpath("//button[@aria-label=\"Next month\"]"))) {
+			//System.out.println("Element is present.");
+
 		} else {
-			System.out.println("Element is not present.");
+			//System.out.println("Element is not present.");
 			driver.findElement(By.xpath("//div[@data-testid=\"searchbox-dates-container\"]")).click();
 		}
 
@@ -91,27 +95,27 @@ public class CrawlerBooking {
 		Integer inOnlyDate = Integer.parseInt(inDate[2]);
 		Integer inOnlyMonth = Integer.parseInt(inDate[1]);
 		Integer inOnlyYear = Integer.parseInt(inDate[0]);
-		System.out.println("Requred : " + inOnlyDate + " " + inOnlyMonth  + "  " + inOnlyYear);
+		//System.out.println("Requred : " + inOnlyDate + " " + inOnlyMonth  + "  " + inOnlyYear);
 
 		String[] outDate = checkOutDate.split("-");
 		Integer outOnlyDate = Integer.parseInt(outDate[2]);
 		Integer outOnlyMonth = Integer.parseInt(outDate[1]);
 		Integer outOnlyYear = Integer.parseInt(outDate[0]);
-		System.out.println("Requred : " + outOnlyDate + " " + outOnlyMonth  + "  " + outOnlyYear);
+		//System.out.println("Requred : " + outOnlyDate + " " + outOnlyMonth  + "  " + outOnlyYear);
 
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		String monthyear = driver.findElement(By.xpath("//h3[@class=\"e1eebb6a1e ee7ec6b631\"]")).getText();
-		System.out.println("Extarcted value is : " +monthyear);
+		//System.out.println("Extarcted value is : " +monthyear);
 		String extractedData[] = monthyear.split(" ");
 		Integer extractedMonth = getMonthValue(extractedData[0]);
 		Integer extractedYear = Integer.parseInt(extractedData[1]);
 
-		System.out.println("Extracted: " + extractedMonth.toString() + " " + extractedYear.toString());
+		//System.out.println("Extracted: " + extractedMonth.toString() + " " + extractedYear.toString());
 
 		int numberOfTimeToPressRightButton = 0;
 		if(!(extractedMonth==inOnlyMonth && extractedYear==inOnlyYear)){
@@ -130,24 +134,24 @@ public class CrawlerBooking {
 
 		String startXPath = inOnlyDate+ " " + capitalize(getMonthName(inOnlyMonth).toLowerCase()) + " " + inOnlyYear;
 		String endXPath = outOnlyDate+ " " + capitalize(getMonthName(outOnlyMonth).toLowerCase()) + " " + outOnlyYear;
-		System.out.println("StartXPath: " + startXPath + "\nEndXPath = " + endXPath);
+		//System.out.println("StartXPath: " + startXPath + "\nEndXPath = " + endXPath);
 
 		String firstDateXpath = "//span[@aria-label=\""+startXPath+"\"]".strip();
 		String lastDateXpath = "//span[@aria-label=\""+endXPath+"\"]".strip();
-		System.out.println("Final Path : " + firstDateXpath + lastDateXpath);
+		//System.out.println("Final Path : " + firstDateXpath + lastDateXpath);
 
 
 		driver.findElement(By.xpath(firstDateXpath)).click();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		driver.findElement(By.xpath(lastDateXpath)).click();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 	}
@@ -217,17 +221,17 @@ public class CrawlerBooking {
 	}
 
 	private static void crawlListingsAndStoreDataForBooking(WebDriver driver,String destination) {
-		System.out.println("crawlListingsAndStoreDataForBooking");
+		System.out.println("crawl Listings And Store Data For Booking");
 
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		String numberOfListingFoundIsXPath = "//h1[@aria-live=\"assertive\"]";
 		String listingNumber = driver.findElement(By.xpath(numberOfListingFoundIsXPath)).getText();
 		int numberOfList = Integer.parseInt(listingNumber.split(" ")[1]);
-		System.out.println("Number of listing is: " + numberOfList);
+		//System.out.println("Number of listing is: " + numberOfList);
 		String fullContainerXPath ="//div[@data-testid=\"property-card\"]";
 
 		List<WebElement> listings = driver.findElements(By.xpath(fullContainerXPath));
@@ -239,34 +243,34 @@ public class CrawlerBooking {
 
 		for (int i = 0; i < listings.size(); i++) {
 			WebElement listing = listings.get(i);
-			if(i>5){
-				break;
-			}
+
+
+
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 
 			try {
 				// Extract data from the listing as strings
 				String linkToHotel = listing.findElement(By.xpath(".//div[1]/div/div[1]/div/h3/a")).getAttribute("href");
-				System.out.println("Link to Rooms: " + linkToHotel);
+				//System.out.println("Link to Rooms: " + linkToHotel);
 				linkToHotel = linkToHotel.trim();
 				String titleOfHotel = listing.findElement(By.xpath(".//div[1]/div/div[1]/div/h3/a/div[1]")).getText();
 				titleOfHotel = titleOfHotel.trim();
-				System.out.println("titleOfHotel: " + titleOfHotel);
+				//System.out.println("titleOfHotel: " + titleOfHotel);
 				String priceOfHotel = listing.findElement(By.xpath(".//div[1]/div[2]/div/div[2]/div[2]/div/div[1]/span")).getText();
-				System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+				//System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
 				priceOfHotel = priceOfHotel.trim();
 				String ratingOfHotel = listing.findElement(By.xpath(".//div[1]/div[2]/div/div[1]/div[2]/div/div/a/span/div/div[1]")).getText();
-				System.out.println("Rating Of Hotel is : " + ratingOfHotel);
+				//System.out.println("Rating Of Hotel is : " + ratingOfHotel);
 				ratingOfHotel = ratingOfHotel.trim();
 				String ratingInWords = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[1]")).getText();
-				System.out.println("Ratings in words is : " + ratingInWords);
+				//System.out.println("Ratings in words is : " + ratingInWords);
 				ratingInWords = ratingInWords.trim();
 				String numberOfReview = listing.findElement(By.xpath(".//div/div/div/a/span/div/div[2]/div[2]")).getText();
-				System.out.println("Number of Review is : " + numberOfReview);
+				//System.out.println("Number of Review is : " + numberOfReview);
 				numberOfReview = numberOfReview.trim();
 
 				ratingOfHotel = HotelInfoClass.extractScore(ratingOfHotel);
@@ -277,9 +281,9 @@ public class CrawlerBooking {
 				obj.saveObjectToCSV("booking.csv");
 
 			} catch (Exception e) {
-				System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
+				//System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
 			} finally {
-				System.out.println("Competed the crawling for Booking.com");
+				//System.out.println("Competed the crawling for Booking.com");
 			}
 		}
 

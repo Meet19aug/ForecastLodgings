@@ -85,6 +85,5 @@ public class CrawlerGetARoom {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

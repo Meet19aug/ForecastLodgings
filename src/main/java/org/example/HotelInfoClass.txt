@@ -86,7 +86,7 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
 
             // Write the content to the file
             writer.write(this.toString());
-            System.out.println("Content successfully written to the file: " + filename);
+            //System.out.println("Content successfully written to the file: " + filename);
         } catch (IOException e) {
             System.err.println("Error writing to the file: " + e.getMessage());
         }
@@ -113,16 +113,16 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
         Path currentPath = Paths.get(System.getProperty("user.dir"));
         Path dirpath = Paths.get(currentPath.toString(), "assets");
         filename = dirpath.toString() + "/" + filename;
-        System.out.println("LoadKObjectFromCSV : " + filename);
+        //System.out.println("LoadKObjectFromCSV : " + filename);
         HotelInfoClass[] hotelsdata = new HotelInfoClass[maxExtract];
         for (int i = 0; i < maxExtract; i++) {
             hotelsdata[i]=new HotelInfoClass();
         }
         int cnt=0;
-        System.out.println("Working After intitlizing object");
+       // System.out.println("Working After intitlizing object");
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line = reader.readLine();
-            System.out.println("line ="+ line);
+            //System.out.println("line ="+ line);
             if(line==null){
                 System.err.println("Empty file: " + filename);
                 return null;
@@ -130,10 +130,7 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
                 while (true) {
                     if(line!=null && cnt<maxExtract) {
                         String[] data = line.split("\",\"");
-                        for (int i = 0; i < data.length; i++) {
-                            System.out.println(data[i]);
-                        }
-                        System.out.println(data.length);
+                        //System.out.println(data.length);
                         if (data.length == 5) { // Assuming there are exactly 5 fields
                             hotelsdata[cnt].setHotelName(data[0].replace("\"", ""));
                             hotelsdata[cnt].setLinkToHotel(data[1].replace("\"", ""));
@@ -142,7 +139,7 @@ public class HotelInfoClass implements Comparable<HotelInfoClass> {
                             hotelsdata[cnt].setRatingWord(data[4].replace("\"", ""));
                             cnt++;
                         }
-                        System.out.println("---------");
+                        //System.out.println("---------");
                     }else{
                         return hotelsdata;
                     }

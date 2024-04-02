@@ -129,10 +129,7 @@ public class PriceRangeFiletering {
             int id = 1; // Starting ID for hotels
             int j = 0;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 String[] data = line.split("\",\"");
-                System.out.println("index " + j++);
-                System.out.println(data[0] + "\t" + data[1] + "\t" + data[2] + "\t" + data[3] + "\t" + data[4] + "\t");
                 if (data.length > 4) { // Ensure data has at least five parts
                     String hotelName = data[0].trim();
                     String url = data[1].trim();

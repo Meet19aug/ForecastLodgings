@@ -43,9 +43,6 @@ public class CrawlerCheapFlight {
         }
 
         List<WebElement> listings = driver.findElements(By.xpath(fullContainerXPath));
-        for(WebElement listing : listings){
-            System.out.println(listing.getText());
-        }
 
         if (listings.isEmpty()) {
             System.out.println("No listings found on the page.");
@@ -53,15 +50,13 @@ public class CrawlerCheapFlight {
         }
 
         for (int i = 0; i < listings.size(); i++) {
-            if(i>5){
-                break;
-            }
-            System.out.println("Inside loop");
+
+            //System.out.println("Inside loop");
 
             WebElement listing = listings.get(i);
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -69,35 +64,36 @@ public class CrawlerCheapFlight {
             try {
 
                 String linkToHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getAttribute("href");
-                System.out.println("Link to Rooms: " + linkToHotel);
+                //System.out.println("Link to Rooms: " + linkToHotel);
                 linkToHotel = linkToHotel.trim();
                 String titleOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getText();
-                System.out.println("titleOfHotel: " + titleOfHotel);
+                //System.out.println("titleOfHotel: " + titleOfHotel);
                 titleOfHotel = titleOfHotel.trim();
                 String priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[1]")).getText();
-                System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+                //System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 if(priceOfHotel.equals("Before signing in")){
                     priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[2]")).getText();
-                    System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+                    //System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 }
                 priceOfHotel = priceOfHotel.trim();
                 String ratingOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[1]")).getText();
-                System.out.println("Rating Of Hotel is : " + ratingOfHotel);
+                //System.out.println("Rating Of Hotel is : " + ratingOfHotel);
                 ratingOfHotel = ratingOfHotel.trim();
                 String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]/div[1]")).getText();
-                System.out.println("Ratings in words is : "+ ratingInWords);
+                //System.out.println("Ratings in words is : "+ ratingInWords);
                 ratingInWords = ratingInWords.replaceAll("\n"," ").trim();
                 priceOfHotel= HotelInfoClass.convertToNumeric(priceOfHotel);
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel,linkToHotel,priceOfHotel,ratingOfHotel,ratingInWords);
                 obj.saveObjectToCSV("cheapflights.csv");
             } catch (Exception e) {
-                System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
+                //System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
 
             }
             finally {
-                System.out.println("Crawling for one element done...");
+                //System.out.println("Crawling for one element done...");
             }
         }
+        System.out.println("Crawling completed for Cheapflights.com..");
         driver.quit();
 
     }
