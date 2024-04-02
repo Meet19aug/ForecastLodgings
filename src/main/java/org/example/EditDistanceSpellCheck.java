@@ -89,7 +89,7 @@ public class EditDistanceSpellCheck {
 
     // Method to perform spell checking and suggest similar words
     static int performSpellCheck(String targetWord, String fileName) {
-        System.out.println("Do you mean one of the following words? ");
+        System.out.println("*** Do you mean one of the following words? ***");
 // Read words from the file and store them in a set
         Set<String> wordSet = readWordsFromFileAndPutIntoSet(fileName);
 // Initialize a map to store words and their edit distances from the target word

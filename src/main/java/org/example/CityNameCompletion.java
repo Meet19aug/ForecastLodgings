@@ -11,7 +11,6 @@ class NodeOfTrie1 {
     char data;
     boolean isEndOfWord;
     NodeOfTrie1[] children;
-
     // Constructor to initialize a NodeOfTrie1
     public NodeOfTrie1(char data) {
         this.data = data;

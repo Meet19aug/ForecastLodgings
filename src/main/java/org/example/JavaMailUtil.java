@@ -20,8 +20,10 @@ public class JavaMailUtil {
             Properties properties = new Properties();
             properties.put("mail.smtp.auth", true); // Enable SMTP authentication
             properties.put("mail.smtp.host", "smtp.gmail.com"); // Set SMTP host
-            properties.put("mail.smtp.port", "587"); // Set SMTP port
+            properties.put("mail.smtp.ssl.enable", "true");
             properties.put("mail.smtp.starttls.enable", true); // Enable STARTTLS encryption
+            properties.put("mail.smtp.port", "465"); // Set SMTP port -586
+
 
 // Sender email and password
             String myAccountEmail = "meetpatelaug"; // Replace with your email

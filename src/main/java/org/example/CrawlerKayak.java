@@ -90,18 +90,14 @@ public class CrawlerKayak {
 
 // Iterate through each listing to extract data
         for (int i = 0; i < listings.size(); i++) {
-            System.out.println("Inside loop");
-            // Getting top10 only for time constraint.
-            if(i>10){
-                break;
-            }
+            //System.out.println("Inside loop");
 
 // Get the current listing
             WebElement listing = listings.get(i);
 
             try {
 // Pause for a moment to ensure elements are loaded
-                Thread.sleep(2000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -109,26 +105,26 @@ public class CrawlerKayak {
             try {
 // Extract data from the listing elements
                 String linkToHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getAttribute("href");
-                System.out.println("Link to Rooms: " + linkToHotel);
+                //System.out.println("Link to Rooms: " + linkToHotel);
                 linkToHotel = linkToHotel.trim();
                 String titleOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[1]/div[2]/a")).getText();
-                System.out.println("Title of Hotel: " + titleOfHotel);
+                //System.out.println("Title of Hotel: " + titleOfHotel);
                 titleOfHotel = titleOfHotel.trim();
                 String priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[1]")).getText();
-                System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+                //System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 if (priceOfHotel.equals("Before signing in")) {
                     priceOfHotel = listing.findElement(By.xpath(".//div[3]/div[3]/div/div/div[2]/div[2]")).getText();
-                    System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
+                    //System.out.println("Price Of Hotel Excluding Tax is :" + priceOfHotel);
                 }
                 priceOfHotel = priceOfHotel.trim();
                 String ratingOfHotel = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[1]")).getText();
-                System.out.println("Rating Of Hotel is : " + ratingOfHotel);
+                //System.out.println("Rating Of Hotel is : " + ratingOfHotel);
                 ratingOfHotel = ratingOfHotel.trim();
                 String ratingInWords = listing.findElement(By.xpath(".//div[3]/div[2]/div[1]/div[2]/div[1]/div/div[2]")).getText();
                 ratingInWords = ratingInWords.replaceAll("\n", " ").trim();
                 priceOfHotel = HotelInfoClass.convertToNumeric(priceOfHotel);
-                System.out.println("New Price is : " + priceOfHotel);
-                System.out.println("Ratings in words is : " + ratingInWords);
+                //System.out.println("New Price is : " + priceOfHotel);
+                //System.out.println("Ratings in words is : " + ratingInWords);
 
 // Create HotelInfoClass object and save data to CSV
                 HotelInfoClass obj = new HotelInfoClass(titleOfHotel, linkToHotel, priceOfHotel, ratingOfHotel, ratingInWords);
@@ -136,13 +132,14 @@ public class CrawlerKayak {
 
             } catch (Exception e) {
 // Handle any other elements not found exception for this listing
-                System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
+                //System.out.println("Error extracting data for listing " + i + ": " + e.getMessage());
             } finally {
 // Print message indicating completion of crawling for one element
-                System.out.println("Crawling for one element done...");
+                //System.out.println("Crawling for one element done...");
             }
         }
 // Quit the WebDriver instance
+        System.out.println("Crawling completed for Cheapflights.com..");
         driver.quit();
 
     }
