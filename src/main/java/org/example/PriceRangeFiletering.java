@@ -85,7 +85,7 @@ public class PriceRangeFiletering {
         // Menu-driven user interaction loop
         while (true) {
             // Display menu options
-            System.out.println("\nSelect an option:");
+            System.out.println("\nSelect from following options:");
             System.out.println("1. Filter hotels by price range");
             System.out.println("2. Exit");
 

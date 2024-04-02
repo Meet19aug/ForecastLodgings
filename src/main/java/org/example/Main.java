@@ -195,34 +195,35 @@ public class Main {
             if ("No".equalsIgnoreCase(emailOfUser)) {
                 System.out.println("Thank you, we appreciate your option.");
                 menu = false;
-            }
-            if (!(DataValidation.isValidEmail(emailOfUser))) {
-                System.out.println("Invalid email.");
-            }
-            else{
-                int kload = 5;
-                bestUrl = bestUrl.replace("com", "csv");
-                HotelInfoClass[] hi = loadKObjectFromCSV(bestUrl, kload);
-                try {
-                    JavaMailUtil.sendMail(emailOfUser,hi,kload);
-                } catch (Exception e) {
-                    System.out.println("An error occurred while sending the email: " + e.getMessage());
-                }finally {
-                    break;
+            }else {
+                if (!(DataValidation.isValidEmail(emailOfUser))) {
+                    System.out.println("Invalid email.");
+                    menu = true;
+                } else {
+                    int kload = 5;
+                    bestUrl = bestUrl.replace("com", "csv");
+                    HotelInfoClass[] hi = loadKObjectFromCSV(bestUrl, kload);
+                    try {
+                        JavaMailUtil.sendMail(emailOfUser, hi, kload);
+                    } catch (Exception e) {
+                        System.out.println("An error occurred while sending the email: " + e.getMessage());
+                    } finally {
+                        break;
+                    }
                 }
             }
         } while (menu);
 
         // TODO: Inverted Indexing Implementation.
-        System.out.println("Welcome to filtering section....[Price Based filtering..] : ");
+        System.out.println("*********** Welcome to Price Based Filtering ***********");
         bestUrl = bestUrl.replace("com", "csv");
         PriceRangeFiletering.runProgram(bestUrl);
 
         // TODO : Find pattern in file.
         bestUrl = bestUrl.replace("com", "csv");
-        System.out.println("Enter regEx that you want to search, like deals with `very good`, `poor` or `https://[^\\s]*jBCEG-Ty9A&pm[^\\s]*`");
-
+        menu=true;
         do{
+            System.out.println("Enter regEx that you want to search, like deals with `very good`, `poor` or `https://[^\\s]*jBCEG-Ty9A&pm[^\\s]*`");
             String regex = scanner.next();
             if ("exit".equalsIgnoreCase(regex)) {
                 System.out.println("Exiting..");
@@ -230,10 +231,10 @@ public class Main {
                 return;
             }else{
                 FindPatternInFile.readFile(bestUrl,regex);
-                break;
+                menu=true;
             }
 
-        }while(true);
+        }while(menu);
 
         // Closing the scanner
         scanner.close();

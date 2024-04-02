@@ -48,7 +48,7 @@ public class JavaMailUtil {
 
 // Send the message
             if (message != null) {
-                session.setDebug(true); // Enable debugging for troubleshooting
+                session.setDebug(false); // Enable debugging for troubleshooting
                 Transport.send(message); // Send the email
                 System.out.println("Message sent successfully to " + recipient);
             } else {
@@ -83,7 +83,6 @@ public class JavaMailUtil {
         try {
             int kload = 5; // Number of hotels to load from CSV
             HotelInfoClass[] hotelInfo = loadKObjectFromCSV("cheapflights.csv", kload); // Load hotel info from CSV
-            System.out.println(hotelInfo[0].toString()); // Print the first hotel info for verification
             JavaMailUtil.sendMail("meetpatel494494aug@gmail.com", hotelInfo, kload); // Send email to recipient
         } catch (Exception e) {
             System.out.println("An error occurred while sending the email: " + e.getMessage());
