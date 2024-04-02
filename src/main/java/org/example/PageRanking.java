@@ -17,14 +17,18 @@ public class PageRanking {
         customQuickSort(entryList, 0, entryList.size() - 1);
 
 // Print the sorted entries
+
         /*for (Map.Entry<String, Integer> entry : entryList) {
+
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }*/
 
 // Find the maximum key after sorting
         String maxKey = entryList.isEmpty() ? "" : entryList.get(entryList.size() - 1).getKey();
+
         System.out.println("*** Highest Rank page is ***");
         System.out.println(maxKey);
+
         return maxKey;
     }
 
