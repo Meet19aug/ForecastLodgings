@@ -54,6 +54,9 @@ public class CrawlerCheapFlight {
 
         for (int i = 0; i < listings.size(); i++) {
             System.out.println("Inside loop");
+            if(i>10){
+                break;
+            }
 
             WebElement listing = listings.get(i);
 

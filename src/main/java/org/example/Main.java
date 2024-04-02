@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 import static org.example.CrawlerBooking.fetchDataFromBooking;
 import static org.example.CrawlerCheapFlight.fetchDataFromCheapFlight;
-import static org.example.EditDistanceSpellCheck.exe2a;
+import static org.example.EditDistanceSpellCheck.performSpellCheck;
 import static org.example.FrequencyCountOfWord.frequencyCountFunction;
 import static org.example.HotelInfoClass.loadKObjectFromCSV;
 import static org.example.PageRanking.mostSuitablePageURL;
@@ -74,7 +74,7 @@ public class Main {
                 }
                 if (x == 1) {
                     String filepathForCities = dirpath.toString() + "/cityname.txt";
-                    int y = exe2a(searchTitle, filepathForCities);
+                    int y = performSpellCheck(searchTitle, filepathForCities);
                     if (y != 0) {
                         System.out.println("We suggested most 2 similar words now select one.");
                     }

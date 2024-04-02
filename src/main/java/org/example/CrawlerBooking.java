@@ -240,6 +240,9 @@ public class CrawlerBooking {
 
 		for (int i = 0; i < listings.size(); i++) {
 			WebElement listing = listings.get(i);
+			if(i>9){
+				break;
+			}
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

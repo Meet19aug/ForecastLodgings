@@ -24,10 +24,11 @@ public class TrendingSearchFunctionality {
             e.printStackTrace();
         }
         // Delete and print max element
+        System.out.println("Most Search Cities are: ");
         for (int i = 0; i < k; i++) {
             MaxHeapFromCSV.HeapEntry maxEntry = maxHeap.deleteMax();
             if (maxEntry != null) {
-                System.out.println(maxEntry.word );
+                System.out.println(maxEntry.word+ " - ("+ maxEntry.value + ")");
             } else {
                 System.out.println("Heap is empty.");
             }
@@ -36,7 +37,9 @@ public class TrendingSearchFunctionality {
     public static void updateFrequency(String csvFile, String word) {
         boolean updated = false;
         List<String[]> rows = new ArrayList<>();
-
+        Path currentPath = Paths.get(System.getProperty("user.dir"));
+        Path dirpath = Paths.get(currentPath.toString(),"assets");
+        csvFile = dirpath+"/"+csvFile;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             String line;
             while ((line = br.readLine()) != null) {

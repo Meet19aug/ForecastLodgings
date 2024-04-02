@@ -1,4 +1,4 @@
-package org.example;
+package org.example;// Import necessary packages
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,118 +9,134 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// Define the class for spell checking using edit distance
 public class EditDistanceSpellCheck {
+    // Main method to execute spell checking
     public static void main(String[] args) {
-        String searchTitle="windsedadf";
-        System.out.println("User Entered word is : " + searchTitle);
+// Define the target word for spell checking
+        String userInput = "windsedadf";
+        System.out.println("User Entered word is : " + userInput);
+
+// Define the file path for the dictionary of words
         Path currentPath = Paths.get(System.getProperty("user.dir"));
-        Path dirpath = Paths.get(currentPath.toString(),"assets");
-        String filepathForCities = dirpath.toString() + "/cityname.txt";
-        int y = exe2a(searchTitle, filepathForCities);
-        if (y != 0) {
+        Path dirpath = Paths.get(currentPath.toString(), "assets");
+        String wordFilePath = dirpath.toString() + "/cityname.txt";
+
+// Perform spell checking
+        int result = performSpellCheck(userInput, wordFilePath);
+        if (result != 0) {
             System.out.println("We suggested most 2 similar words now select one.");
         }
     }
-    public static int editDistance(String word1, String word2) {
-        int len1 = word1.length();
-        int len2 = word2.length();
 
-        int[][] dp = new int[len1 + 1][len2 + 1];
+    // Method to calculate theEdit_distances in  2 words
+    public static int calculateEditDistance(String word1, String word2) {
+// Initialize variables
+        int length1 = word1.length();
+        int length2 = word2.length();
+        int[][] dp = new int[length1 + 1][length2 + 1];
 
-        for (int i = 0; i <= len1; i++) {
-            dp[i][0] = i;
+// Populate the dynamic programming array
+        for (int I_1 = 0; I_1 <= length1; I_1++) {
+            dp[I_1][0] = I_1;
         }
-
-        for (int j = 0; j <= len2; j++) {
-            dp[0][j] = j;
+        for (int J_2 = 0; J_2 <= length2; J_2++) {
+            dp[0][J_2] = J_2;
         }
-
-        for (int i = 0; i < len1; i++) {
-            char c1 = word1.charAt(i);
-            for (int j = 0; j < len2; j++) {
-                char c2 = word2.charAt(j);
-
-                //if last two chars equal
-                if (c1 == c2) {
-                    //update dp value for +1 length
-                    dp[i + 1][j + 1] = dp[i][j];
+        for (int I_1 = 0; I_1 < length1; I_1++) {
+            char char1 = word1.charAt(I_1);
+            for (int J_2 = 0; J_2 < length2; J_2++) {
+                char char2 = word2.charAt(J_2);
+// Update the dp value based on the characters
+                if (char1 == char2) {
+                    dp[I_1 + 1][J_2 + 1] = dp[I_1][J_2];
                 } else {
-                    int replace = dp[i][j] + 1;
-                    int insert = dp[i][j + 1] + 1;
-                    int delete = dp[i + 1][j] + 1;
-
+                    int replace = dp[I_1][J_2] + 1;
+                    int insert = dp[I_1][J_2 + 1] + 1;
+                    int delete = dp[I_1 + 1][J_2] + 1;
                     int min = replace > insert ? insert : replace;
                     min = delete > min ? min : delete;
-                    dp[i + 1][j + 1] = min;
+                    dp[I_1 + 1][J_2 + 1] = min;
                 }
             }
         }
-
-        return dp[len1][len2];
+// Return the final edit distance
+        return dp[length1][length2];
     }
-    public static Set<String> readFileAndPutWordsIntoSet(String filePath_mp) {
-        Set<String> wordsSet_mp = new HashSet<>();
 
-        try (BufferedReader reader_mp = new BufferedReader(new FileReader(filePath_mp))) {
-            String line_mp;
-            Pattern pattern_mp = Pattern.compile("[a-zA-Z]+"); // Regex pattern to match lowercase letters only
-
-            while ((line_mp = reader_mp.readLine()) != null) {
-                Matcher matcher_mp = pattern_mp.matcher(line_mp.toLowerCase()); // Convert line to lowercase before matching
-                while (matcher_mp.find()) {
-                    String word_mp = matcher_mp.group();
-                    wordsSet_mp.add(word_mp);
+    // Method to read words from a file and store them in a set
+    public static Set<String> readWordsFromFileAndPutIntoSet(String filePath) {
+// Initialize a set to store words
+        Set<String> wordSet = new HashSet<>();
+        try (BufferedReader Buuff_Reading = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            Pattern pattern = Pattern.compile("[a-zA-Z]+"); // Regex pattern to match lowercase letters only
+// Read each line from the file
+            while ((line = Buuff_Reading.readLine()) != null) {
+                Matcher Matcher_1 = pattern.matcher(line.toLowerCase()); // Convert line to lowercase before matching
+// Find words in the line and add them to the set
+                while (Matcher_1.find()) {
+                    String word = Matcher_1.group();
+                    wordSet.add(word);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return wordsSet_mp;
+// Return the set of words
+        return wordSet;
     }
 
-    static int exe2a(String targetWord_mp, String fileName_mp) {
+    // Method to perform spell checking and suggest similar words
+    static int performSpellCheck(String targetWord, String fileName) {
         System.out.println("Do you mean one of the following words? ");
-        Set<String> wordSet_mp = readFileAndPutWordsIntoSet(fileName_mp);
-
-        Map<String, Integer> wordIntegerMap_mp = new HashMap<>();
-        Iterator<String> wordIterator_mp = wordSet_mp.iterator();
-        for (int i_mp = 0; i_mp < wordSet_mp.size() ; i_mp++) {
-            String word_mp = wordIterator_mp.next();
-            int distance_mp = editDistance(word_mp, targetWord_mp);
-            wordIntegerMap_mp.put(word_mp, distance_mp);
+// Read words from the file and store them in a set
+        Set<String> wordSet = readWordsFromFileAndPutIntoSet(fileName);
+// Initialize a map to store words and their edit distances from the target word
+        Map<String, Integer> wordDistanceMap = new HashMap<>();
+        Iterator<String> wordIterator = wordSet.iterator();
+// Calculate edit distance for each word and store in the map
+        for (int I_1 = 0; I_1 < wordSet.size(); I_1++) {
+            String word = wordIterator.next();
+            int distance = calculateEditDistance(word, targetWord);
+            wordDistanceMap.put(word, distance);
         }
-        Map<String, Integer> sortedWordIntegerMap_mp = sortByValue(wordIntegerMap_mp);
-        int i_mp=0;
-        for (Map.Entry<String, Integer> entry_mp : sortedWordIntegerMap_mp.entrySet()) {
-            i_mp++;
-            if(i_mp>2){
+// Sort the map by edit distance
+        Map<String, Integer> sortedWordDistanceMap = sortMapByValue(wordDistanceMap);
+        int I_1 = 0;
+// Iterate over the sorted map and print similar words
+        for (Map.Entry<String, Integer> entry : sortedWordDistanceMap.entrySet()) {
+            I_1++;
+            if (I_1 > 2) {
                 break;
             }
-            if(i_mp==0){
-                if(entry_mp.getKey()==targetWord_mp){
+            if (I_1 == 0) {
+                if (entry.getKey().equals(targetWord)) {
                     return 0;
                 }
             }
-            System.out.println(entry_mp.getKey());
+            System.out.println(entry.getKey());
         }
         return 1;
     }
 
-    public static Map<String, Integer> sortByValue(Map<String, Integer> unsortedMap_mp) {
-        List<Map.Entry<String, Integer>> list_mp = new LinkedList<>(unsortedMap_mp.entrySet());
-        Collections.sort(list_mp, new Comparator<Map.Entry<String, Integer>>() {
+    // Method to sort a map by its values
+    public static Map<String, Integer> sortMapByValue(Map<String, Integer> unsortedMap) {
+// Convert the map to a list of entries
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(unsortedMap.entrySet());
+// Sort the list based on the values
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
             public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
                 return o1.getValue().compareTo(o2.getValue());
             }
         });
-
-        Map<String, Integer> sortedMap_mp = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry_mp : list_mp) {
-            sortedMap_mp.put(entry_mp.getKey(), entry_mp.getValue());
+// Initialize a new map to store the sorted entries
+        Map<String, Integer> sortedMap = new LinkedHashMap<>();
+// Iterate over the sorted list and put entries in the new map
+        for (Map.Entry<String, Integer> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
         }
-
-        return sortedMap_mp;
+// Return the sorted map
+        return sortedMap;
     }
-
 }
