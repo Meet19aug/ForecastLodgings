@@ -33,7 +33,7 @@ public class Main {
         String searchTitle="";
         Scanner scanner = new Scanner(System.in);
         List<Map<String, String>> products = FetchDataFromExcel.readData(filePaths);
-        DSTrie trie = new DSTrie();
+        Trie trie = new Trie();
         for (Map<String, String> product : products) {
             String title = product.get("City");
             String[] titleWords = title.split("\\s+");

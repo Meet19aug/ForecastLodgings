@@ -218,7 +218,7 @@ public class CrawlerBooking {
 	}
 
 	private static void crawlListingsAndStoreDataForBooking(WebDriver driver,String destination) {
-		System.out.println("crawlListingsAndStoreDataForBooking");
+		System.out.println("crawl Listings And Store Data For Booking");
 
 		try {
 			Thread.sleep(2000);

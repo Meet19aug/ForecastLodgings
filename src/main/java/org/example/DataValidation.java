@@ -75,7 +75,5 @@ public class DataValidation {
         System.out.println("Date given for checking is: "+emailTest);
         System.out.println("Result is : "+ isValidEmail(emailTest));
 
-
-
     }
 }
